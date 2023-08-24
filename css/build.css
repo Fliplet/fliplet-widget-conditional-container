@@ -1,0 +1,40 @@
+.mode-interact fl-helper[name="conditional-container"].edit.hidden {
+  display: block!important;
+}
+
+.mode-interact [data-name="Conditional container"] {
+  margin: 30px 0;
+  /* padding: 15px 0; */
+}
+
+.mode-interact fl-helper[name='conditional-container']::before {
+  content: 'Conditional container';
+}
+.mode-interact [data-name='conditional-container']::before {
+  content: 'Conditional container';
+}
+
+.mode-interact [data-name='conditional-container']:before {
+  border-bottom-right-radius: 10px;
+  cursor: grab;
+  position: relative;
+  padding: 5px;
+  font-size: 12px;
+  color: white;
+  background: darkorange;
+  top: -2px;
+  left: 0px;
+  z-index: 9;
+}
+.mode-interact fl-helper[name='conditional-container']:before {
+  border-bottom-right-radius: 10px;
+  cursor: grab;
+  position: relative;
+  padding: 5px;
+  font-size: 12px;
+  color: white;
+  background: darkorange;
+  top: -2px;
+  left: 0px;
+  z-index: 9;
+}

@@ -1,0 +1,160 @@
+Fliplet.Widget.instance({
+  name: 'conditional-container',
+  displayName: 'Conditional container',
+  icon: 'fa-file-code-o',
+  data: {
+    placeholder: 'Conditional container configurations'
+  },
+  views: [
+    {
+      name: 'dt-content',
+      displayName: 'Drag&drop area',
+      // placeholder: '<div class="well text-center" data-view="content">Add components here.</div>'
+      placeholder: '<div class="well text-center">Add components here.</div>'
+    }
+  ],
+  render: {
+    template: [
+      // '<div class="placeholder"><i class="icon fl-icon-settings"></i>{! placeholder !}</div>',
+      '<div class="conditional" data-view="dt-content"></div>'
+    ].join(''),
+    beforeReady: function () {
+      let element = $(this.$el);
+      Fliplet.Env.get('interact') ? element.addClass('edit') : element.removeClass('edit');
+    },
+    ready: async function () {
+      await Fliplet.Widget.initializeChildren(this.$el, this);
+      let helper = this;
+      let conditions = this.fields.conditions;
+      let environment = Fliplet.Env.get('preview');
+      $(helper.el).addClass('hidden'); //by default button is hidden
+
+      return Fliplet.Session.get().then(function onSessionRetrieved(session) {
+        if (session && session.entries) {
+          if (session.entries.dataSource) {
+            let user = session.entries.dataSource.data;
+            let result;
+
+
+            function ifArray(elem) {
+              if (Array.isArray(elem)) {
+                return 'array';
+              } else if (typeof elem === 'string') {
+                return 'string';
+              } else { return false; }
+            }
+
+            function ifValidJson(elem) {
+              try {
+                JSON.parse(elem);
+                let parsedValue = JSON.parse(elem);
+                if (Array.isArray(parsedValue)) {
+                  return 'array';
+                }
+                return false;
+              } catch (error) {
+                return 'string';
+              }
+            }
+
+            function evaluate(condition, expression) {
+              try {
+                eval(expression);
+                if (eval(expression)) {
+                  return condition['visibility'];
+                }
+              } catch (error) {
+                console.log('Expression can\'t be evaluated. Error: ' + error);
+                return false;
+              }
+            }
+
+            function setResult(expr) {
+              if (expr) {
+                result = expr === 'hide' ? false : true;
+              }
+            }
+
+            function ifArrayIncludes(array, condition) {
+              if (array.includes(condition['user_value'])) {
+                setResult(condition['visibility']);
+              } else {
+                _.forEach(array, function (value) {
+                  if (typeof value === 'number') {
+                    //user value to number
+                    if (value === +condition['user_value']) {
+                      setResult(condition['visibility']);
+                    }
+                  }
+                });
+              }
+            }
+
+            if (conditions) {
+              for (let i = 0; i < conditions.length; i++) {
+                if (user.hasOwnProperty(conditions[i]['user_key'])) {
+                  let expression;
+                  let logic = conditions[i]['logic'];
+
+                  if (logic !== 'contains') {
+                    expression = '"' + user[conditions[i]['user_key']] + '"';
+                    if (logic === 'equal') {
+                      expression += ' === ' + '"' + conditions[i]['user_value'] + '"';
+                    } else if (logic === 'not-equal') {
+                      expression += ' !== ' + '"' + conditions[i]['user_value'] + '"';
+                    }
+                    /*else if (logic === 'starts'){
+                      expression += '.indexOf("' + conditions[i]['user_value'] + '") === 0';
+                    } else if (logic === 'ends'){
+                      expression +=  '.endsWith("' + conditions[i]['user_value'] + '")';
+                    }*/
+
+                    setResult(evaluate(conditions[i], expression));
+
+                  } else {
+                    let keyType = ifArray(user[conditions[i]['user_key']]);
+                    if (!keyType) {
+                      //other type but array or string
+                      expression = '"' + user[conditions[i]['user_key']] + '".indexOf("' + conditions[i]['user_value'] + '") > -1';
+                      setResult(evaluate(conditions[i], expression));
+                    } else if (keyType === 'string') {
+                      //check if string can be parsed into JSON array
+                      let ifJSON = ifValidJson(user[conditions[i]['user_key']]);
+                      if (!ifJSON || ifJSON === 'string') {
+                        //parsed value is not an array nor a string
+                        expression = '"' + user[conditions[i]['user_key']] + '".indexOf("' + conditions[i]['user_value'] + '") > -1';
+                        setResult(evaluate(conditions[i], expression));
+                      } else if (ifJSON === 'array') {
+                        let currentArray = JSON.parse(user[conditions[i]['user_key']]);
+                        ifArrayIncludes(currentArray, conditions[i]);
+                      }
+                    } else if (keyType === 'array') {
+                      ifArrayIncludes(user[conditions[i]['user_key']], conditions[i]);
+                    }
+                  }
+                } else {
+                  if (environment) {
+                    Fliplet.UI.Toast('User doesn\'t contain key: ' + conditions[i]['user_key']);
+                  }
+                }
+              }
+            }
+
+            if (result) {
+              $(helper.el).removeClass('hidden');
+            }
+          } else {
+            if (environment) {
+              Fliplet.UI.Toast('User is not logged in');
+            }
+          }
+        } else {
+          if (environment) {
+            Fliplet.UI.Toast('User is not logged in');
+          }
+        }
+        return Promise.resolve(true);
+      });
+    }
+  },
+});
