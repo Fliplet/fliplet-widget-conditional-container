@@ -24,6 +24,7 @@ Fliplet.Widget.instance({
     },
     ready: async function () {
       await Fliplet.Widget.initializeChildren(this.$el, this);
+
       let helper = this;
       let conditions = this.fields.conditions;
       let environment = Fliplet.Env.get('preview');
@@ -34,7 +35,6 @@ Fliplet.Widget.instance({
           if (session.entries.dataSource) {
             let user = session.entries.dataSource.data;
             let result;
-
 
             function ifArray(elem) {
               if (Array.isArray(elem)) {
@@ -155,6 +155,31 @@ Fliplet.Widget.instance({
         }
         return Promise.resolve(true);
       });
+    },
+    change: function(arrayOfFields){
+      _.forEach(arrayOfFields, function(field){
+        updatePanelTitleName(field);
+      });
+      
+      function updatePanelTitleName(field){   
+        let visibility = field[1].value;
+        let key = field[2].value;              
+        let condition = field[3].value || '';
+        let value = field[4].value;
+        
+        if (visibility && key && condition && value){
+          visibility = visibility.charAt(0).toUpperCase() + visibility.slice(1);
+          condition = condition.charAt(0).toLowerCase() + condition.slice(1);
+          if (condition.indexOf('equal') > -1){
+            condition += ' to';
+          }
+
+          let titleName = `${visibility} if "${key}" ${condition} "${value}"`;
+          field[0].value = titleName;
+        } else {
+          field[0].value = 'Incomplete condition';
+        }
+      }
     }
   },
 });

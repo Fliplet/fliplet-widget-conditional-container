@@ -4,6 +4,7 @@
 
 .mode-interact [data-name="Conditional container"] {
   margin: 30px 0;
+  width: 100%;
   /* padding: 15px 0; */
 }
 
