@@ -122,7 +122,11 @@ Fliplet.Widget.instance({
                       let ifJSON = ifValidJson(user[conditions[i]['user_key']]);
                       if (!ifJSON || ifJSON === 'string') {
                         //parsed value is not an array nor a string
-                        expression = '"' + user[conditions[i]['user_key']] + '".indexOf("' + conditions[i]['user_value'] + '") > -1';
+                        // expression = '"' + user[conditions[i]['user_key']] + '".indexOf("' + conditions[i]['user_value'] + '") > -1';
+                        expression = user[conditions[i]['user_key']]
+                          .split(',')
+                          .map(el => el.trim())
+                          .includes(decodeHTMLEntities(conditions[i]['user_value']));
                         setResult(evaluate(conditions[i], expression));
                       } else if (ifJSON === 'array') {
                         let currentArray = JSON.parse(user[conditions[i]['user_key']]);
@@ -156,21 +160,21 @@ Fliplet.Widget.instance({
         return Promise.resolve(true);
       });
     },
-    change: function(arrayOfFields){
-      _.forEach(arrayOfFields, function(field){
+    change: function (arrayOfFields) {
+      _.forEach(arrayOfFields, function (field) {
         updatePanelTitleName(field);
       });
-      
-      function updatePanelTitleName(field){   
+
+      function updatePanelTitleName(field) {
         let visibility = field[1].value;
-        let key = field[2].value;              
+        let key = field[2].value;
         let condition = field[3].value || '';
         let value = field[4].value;
-        
-        if (visibility && key && condition && value){
+
+        if (visibility && key && condition && value) {
           visibility = visibility.charAt(0).toUpperCase() + visibility.slice(1);
           condition = condition.charAt(0).toLowerCase() + condition.slice(1);
-          if (condition.indexOf('equal') > -1){
+          if (condition.indexOf('equal') > -1) {
             condition += ' to';
           }
 
