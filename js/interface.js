@@ -3,7 +3,14 @@ Fliplet.Widget.generateInterface({
   fields: [
     {
       type: 'html',
-      html: '<div class="alert alert-info"><p>Please note the container will hide the components by default.</p><p>If multiple conditions are added and a user matches more than one condition, the last condition will overwite the previous conditions.</p></div>'
+      html: `<div class="alert alert-info">
+        <p>Please note the container will hide the components by default.</p>
+        <p>
+          If multiple conditions are added and a user matches more than one 
+          condition, the last condition will overwrite the previous 
+          conditions.
+        </p>
+      </div>`
     },
     {
       name: 'conditions',
@@ -17,7 +24,7 @@ Fliplet.Widget.generateInterface({
           type: 'text',
           name: 'text',
           required: false,
-          ready: function(el, value){
+          ready: function(el) {
             $(el).hide();
           }
         },
@@ -25,7 +32,10 @@ Fliplet.Widget.generateInterface({
           type: 'radio',
           name: 'visibility',
           label: 'Container visibility if condition is true',
-          options: [{ value: 'hide', label: 'Hide' }, { value: 'show', label: 'Show' }],
+          options: [
+            { value: 'hide', label: 'Hide' },
+            { value: 'show', label: 'Show' }
+          ],
           required: true
         },
         {
@@ -41,7 +51,7 @@ Fliplet.Widget.generateInterface({
           options: [
             { value: 'equal', label: 'Equals' },
             { value: 'not-equal', label: 'Doesn\'t equal' },
-            { value: 'contains', label: 'Contains' },
+            { value: 'contains', label: 'Contains' }
           ],
           required: true
         },
