@@ -89,17 +89,17 @@ Fliplet.Widget.instance({
 
       function ifArrayIncludes(array, condition) {
         if (array.includes(condition['user_value'])) {
-          setResult(condition['visibility']);
-        } else {
-          _.forEach(array, function(value) {
-            if (typeof value === 'number') {
-              // user value to number
-              if (value === +condition['user_value']) {
-                setResult(condition['visibility']);
-              }
-            }
-          });
+          return setResult(condition['visibility']);
         }
+
+        _.forEach(array, function(value) {
+          if (typeof value === 'number') {
+            // user value to number
+            if (value === +condition['user_value']) {
+              return setResult(condition['visibility']);
+            }
+          }
+        });
       }
 
       let helper = this;
@@ -135,14 +135,14 @@ Fliplet.Widget.instance({
                       expression +=  '.endsWith("' + conditions[i]['user_value'] + '")';
                     }*/
 
-                      setResult(evaluate(conditions[i], expression));
+                      result = setResult(evaluate(conditions[i], expression));
                     } else {
                       let keyType = ifArray(user[conditions[i]['user_key']]);
 
                       if (!keyType) {
                       // other type but array or string
                         expression = '"' + user[conditions[i]['user_key']] + '".indexOf("' + conditions[i]['user_value'] + '") > -1';
-                        setResult(evaluate(conditions[i], expression));
+                        result = setResult(evaluate(conditions[i], expression));
                       } else if (keyType === 'string') {
                       // check if string can be parsed into JSON array
                         let ifJSON = ifValidJson(user[conditions[i]['user_key']]);
@@ -153,14 +153,14 @@ Fliplet.Widget.instance({
                             .split(',')
                             .map(el => el.trim())
                             .includes(decodeHTMLEntities(conditions[i]['user_value']));
-                          setResult(evaluate(conditions[i], expression));
+                          result = setResult(evaluate(conditions[i], expression));
                         } else if (ifJSON === 'array') {
                           let currentArray = JSON.parse(user[conditions[i]['user_key']]);
 
-                          ifArrayIncludes(currentArray, conditions[i]);
+                          result = ifArrayIncludes(currentArray, conditions[i]);
                         }
                       } else if (keyType === 'array') {
-                        ifArrayIncludes(user[conditions[i]['user_key']], conditions[i]);
+                        result = ifArrayIncludes(user[conditions[i]['user_key']], conditions[i]);
                       }
                     }
                   } else if (environment) {
