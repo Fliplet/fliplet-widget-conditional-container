@@ -5,34 +5,19 @@
   "icon": "img/icon.png",
   "tags": ["type:component", "category:general"],
   "provider_only": false,
-  "references": [
-    "dt-content:richContent"
-  ],
+  "references": ["dt-content:richContent"],
   "settings": {
     "asyncRendering": true,
     "interfaceWidgetPackage": "com.fliplet.helper-configuration"
   },
   "html_tag": "div",
   "interface": {
-    "dependencies": [
-      "fliplet-core",
-      "fliplet-studio-ui"
-    ],
-    "assets": [
-      "js/interface.js"
-    ]
+    "dependencies": ["fliplet-core", "fliplet-studio-ui"],
+    "assets": ["js/interface.js"]
   },
   "build": {
-    "dependencies": [
-      "jquery",
-      "bootstrap",
-      "fliplet-core",
-      "fliplet-helper"
-    ],
-    "assets": [
-      "css/build.css",
-      "js/build.js"
-    ],
+    "dependencies": ["jquery", "bootstrap", "fliplet-core", "fliplet-helper"],
+    "assets": ["css/build.css", "js/build.js"],
     "appAssets": []
   }
 }
