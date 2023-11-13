@@ -61,7 +61,85 @@ Fliplet.Widget.generateInterface({
           label: 'Value',
           required: true
         }
-      ]
+      ],
+      ready: function(el) {
+        // action on expand/collapse all
+        let collapseButton = $(el).find('.list-field .expand-items');
+        var $panelTitle = $('.panel-title');
+
+        collapseButton.on('click', function() {
+          if (
+            $panelTitle
+              .first()
+              .find('.fa.chevron')
+              .hasClass('fa-chevron-right')
+          ) {
+            $.each($panelTitle, function() {
+              let index = $(this)
+                .closest('.panel.panel-default')
+                .index();
+
+              updatePanelTitleName($(this), index);
+            });
+          }
+        });
+
+        // update condition title on collapsing
+        $(document).on('click', '.panel-title', function() {
+          if (
+            $(this)
+              .find('.fa.chevron')
+              .hasClass('fa-chevron-right')
+          ) {
+            let index = $(this)
+              .closest('.panel.panel-default')
+              .index();
+
+            updatePanelTitleName($(this), index);
+          }
+        });
+
+        // update condition title on ready
+        $.each($panelTitle, function() {
+          let index = $(this)
+            .closest('.panel.panel-default')
+            .index();
+
+          updatePanelTitleName($(this), index);
+        });
+
+        function updatePanelTitleName(panelTitle, index) {
+          let panelBody = panelTitle
+            .closest('.panel-heading')
+            .next('.panel-collapse');
+          let visibility = panelBody
+            .find('[data-field="visibility"] input[type="radio"]:checked')
+            .val();
+          let key = panelBody
+            .find('[data-field="user_key"] input[type="text"]')
+            .val();
+          let condition = panelBody
+            .find('[data-field="logic"] select[id*="logic"] :selected')
+            .text();
+
+          condition = condition === '-- Select an option' ? '' : condition;
+
+          let value = panelBody
+            .find('[data-field="user_value"] input[type="text"]')
+            .val();
+
+          const titleName = visibility && key && condition && value
+            ? `${visibility.charAt(0).toUpperCase()
+               + visibility.slice(1)} if "${key}" ${condition.toLowerCase()} 
+               "${value}"`
+            : 'Incomplete condition';
+
+          const arrayOfFields = Fliplet.Helper.field('conditions').get();
+
+          arrayOfFields[index][0].value = titleName;
+          panelTitle.find('.panel-title-text').text(titleName);
+        }
+      }
     }
   ]
 });

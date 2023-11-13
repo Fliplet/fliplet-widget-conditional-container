@@ -24,20 +24,20 @@ Fliplet.Widget.instance({
     beforeReady: function() {
       let element = $(this.$el);
 
-      Fliplet.Env.get('interact')
-        ? element.addClass('edit') : element.removeClass('edit');
+      element.toggleClass('edit', Fliplet.Env.get('interact'));
     },
     ready: async function() {
       await Fliplet.Widget.initializeChildren(this.$el, this);
 
-      function ifArray(elem) {
+      var result;
+      const userNotLoggedMessage = 'User is not logged in';
+
+      function getType(elem) {
         if (Array.isArray(elem)) {
           return 'array';
-        } else if (typeof elem === 'string') {
-          return 'string';
         }
 
-        return false;
+        return typeof elem === 'string' ? 'string' : false;
       }
 
       function decodeHTMLEntities(str) {
@@ -49,10 +49,8 @@ Fliplet.Widget.instance({
         return temp.textContent || temp.innerText;
       }
 
-      function ifValidJson(elem) {
+      function getParsedType(elem) {
         try {
-          JSON.parse(elem);
-
           let parsedValue = JSON.parse(elem);
 
           if (Array.isArray(parsedValue)) {
@@ -67,44 +65,29 @@ Fliplet.Widget.instance({
 
       function evaluate(condition, expression) {
         try {
-          eval(expression);
-
           if (eval(expression)) {
             return condition['visibility'];
           }
         } catch (error) {
-          // console.log('Expression can\'t be evaluated. Error: ' + error);
-
           return false;
         }
       }
 
       function setResult(expr) {
-        if (expr) {
-          return expr === 'hide' ? false : true;
-        }
-
-        return false;
+        result = expr && expr !== 'hide';
       }
 
-      function ifArrayIncludes(array, condition) {
-        if (array.includes(condition['user_value'])) {
-          return setResult(condition['visibility']);
-        }
+      function isConditionIncluded(array, condition) {
+        const userValue = condition.user_value;
 
-        _.forEach(array, function(value) {
-          if (typeof value === 'number') {
-            // user value to number
-            if (value === +condition['user_value']) {
-              return setResult(condition['visibility']);
-            }
-          }
-        });
+        if (array.includes(userValue) || array.some(value => typeof value === 'number' && value === Number(userValue))) {
+          return setResult(condition.visibility);
+        }
       }
 
       let helper = this;
       let conditions = this.fields.conditions;
-      let environment = Fliplet.Env.get('preview');
+      let isPreview = Fliplet.Env.get('preview');
 
       $(helper.el).addClass('hidden'); // by default button is hidden
 
@@ -113,58 +96,54 @@ Fliplet.Widget.instance({
           if (session && session.entries) {
             if (session.entries.dataSource) {
               let user = session.entries.dataSource.data;
-              let result;
 
               if (conditions) {
                 for (let i = 0; i < conditions.length; i++) {
-                  if (user.hasOwnProperty(conditions[i]['user_key'])) {
+                  const condition = conditions[i];
+                  const userKey = condition['user_key'];
+
+                  if (user.hasOwnProperty(userKey)) {
                     let expression;
-                    let logic = conditions[i]['logic'];
+                    let logic = condition.logic;
 
                     if (logic !== 'contains') {
-                      expression = '"' + user[conditions[i]['user_key']] + '"';
+                      expression = '"' + user[userKey] + '"';
 
                       if (logic === 'equal') {
-                        expression += ' === ' + '"' + conditions[i]['user_value'] + '"';
+                        expression += ' === ' + '"' + condition.user_value + '"';
                       } else if (logic === 'not-equal') {
-                        expression += ' !== ' + '"' + conditions[i]['user_value'] + '"';
+                        expression += ' !== ' + '"' + condition.user_value + '"';
                       }
-                      /* else if (logic === 'starts'){
-                      expression += '.indexOf("' + conditions[i]['user_value'] + '") === 0';
-                    } else if (logic === 'ends'){
-                      expression +=  '.endsWith("' + conditions[i]['user_value'] + '")';
-                    }*/
 
-                      result = setResult(evaluate(conditions[i], expression));
+                      setResult(evaluate(condition, expression));
                     } else {
-                      let keyType = ifArray(user[conditions[i]['user_key']]);
+                      let keyType = getType(user[userKey]);
 
-                      if (!keyType) {
-                      // other type but array or string
-                        expression = '"' + user[conditions[i]['user_key']] + '".indexOf("' + conditions[i]['user_value'] + '") > -1';
-                        result = setResult(evaluate(conditions[i], expression));
+                      if (keyType === 'array') {
+                        isConditionIncluded(user[userKey], condition);
                       } else if (keyType === 'string') {
-                      // check if string can be parsed into JSON array
-                        let ifJSON = ifValidJson(user[conditions[i]['user_key']]);
+                        // check if string can be parsed into JSON array
+                        let parsedType = getParsedType(user[userKey]);
 
-                        if (!ifJSON || ifJSON === 'string') {
-                        // parsed value is not an array nor a string
-                          expression = user[conditions[i]['user_key']]
+                        if (parsedType === 'array') {
+                          let currentArray = JSON.parse(user[userKey]);
+
+                          isConditionIncluded(currentArray, condition);
+                        } else {
+                          expression = user[userKey]
                             .split(',')
                             .map(el => el.trim())
-                            .includes(decodeHTMLEntities(conditions[i]['user_value']));
-                          result = setResult(evaluate(conditions[i], expression));
-                        } else if (ifJSON === 'array') {
-                          let currentArray = JSON.parse(user[conditions[i]['user_key']]);
-
-                          result = ifArrayIncludes(currentArray, conditions[i]);
+                            .includes(decodeHTMLEntities(condition.user_value));
+                          setResult(evaluate(condition, expression));
                         }
-                      } else if (keyType === 'array') {
-                        result = ifArrayIncludes(user[conditions[i]['user_key']], conditions[i]);
+                      } else {
+                        // other type but array or string
+                        expression = '"' + user[userKey] + '".indexOf("' + condition.user_value + '") > -1';
+                        setResult(evaluate(condition, expression));
                       }
                     }
-                  } else if (environment) {
-                    Fliplet.UI.Toast('User doesn\'t contain key: ' + conditions[i]['user_key']);
+                  } else if (isPreview) {
+                    Fliplet.UI.Toast(`User doesn't contain key: ${userKey}`);
                   }
                 }
               }
@@ -172,42 +151,15 @@ Fliplet.Widget.instance({
               if (result) {
                 $(helper.el).removeClass('hidden');
               }
-            } else if (environment) {
-              Fliplet.UI.Toast('User is not logged in');
+            } else if (isPreview) {
+              Fliplet.UI.Toast(userNotLoggedMessage);
             }
-          } else if (environment) {
-            Fliplet.UI.Toast('User is not logged in');
+          } else if (isPreview) {
+            Fliplet.UI.Toast(userNotLoggedMessage);
           }
 
           return Promise.resolve(true);
         });
-    },
-    change: function(arrayOfFields) {
-      _.forEach(arrayOfFields, function(field) {
-        updatePanelTitleName(field);
-      });
-
-      function updatePanelTitleName(field) {
-        let visibility = field[1].value;
-        let key = field[2].value;
-        let condition = field[3].value || '';
-        let value = field[4].value;
-
-        if (visibility && key && condition && value) {
-          visibility = visibility.charAt(0).toUpperCase() + visibility.slice(1);
-          condition = condition.charAt(0).toLowerCase() + condition.slice(1);
-
-          if (condition.indexOf('equal') > -1) {
-            condition += ' to';
-          }
-
-          let titleName = `${visibility} if "${key}" ${condition} "${value}"`;
-
-          field[0].value = titleName;
-        } else {
-          field[0].value = 'Incomplete condition';
-        }
-      }
     }
   }
 });
