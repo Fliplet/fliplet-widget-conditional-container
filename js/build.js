@@ -27,6 +27,8 @@ Fliplet.Widget.instance({
       element.toggleClass('edit', Fliplet.Env.get('interact'));
     },
     ready: async function() {
+      await Fliplet.Widget.initializeChildren(this.$el, this);
+
       var result;
       const userNotLoggedMessage = 'User is not logged in';
 
