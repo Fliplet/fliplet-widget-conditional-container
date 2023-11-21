@@ -27,8 +27,6 @@ Fliplet.Widget.instance({
       element.toggleClass('edit', Fliplet.Env.get('interact'));
     },
     ready: async function() {
-      await Fliplet.Widget.initializeChildren(this.$el, this);
-
       var result;
       const userNotLoggedMessage = 'User is not logged in';
 
@@ -92,7 +90,7 @@ Fliplet.Widget.instance({
       $(helper.el).addClass('hidden'); // by default button is hidden
 
       return Fliplet.Session.get()
-        .then(function onSessionRetrieved(session) {
+        .then(async function onSessionRetrieved(session) {
           if (session && session.entries) {
             if (session.entries.dataSource) {
               let user = session.entries.dataSource.data;
@@ -150,6 +148,7 @@ Fliplet.Widget.instance({
 
               if (result) {
                 $(helper.el).removeClass('hidden');
+                await Fliplet.Widget.initializeChildren(this.$el, this);
               }
             } else if (isPreview) {
               Fliplet.UI.Toast(userNotLoggedMessage);
