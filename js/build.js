@@ -150,7 +150,7 @@ Fliplet.Widget.instance({
 
               if (result) {
                 $(helper.el).removeClass('hidden');
-                await Fliplet.Widget.initializeChildren(this.$el, this);
+                await Fliplet.Widget.initializeChildren(helper.$el, helper);
               }
             } else if (isPreview) {
               Fliplet.UI.Toast(userNotLoggedMessage);
