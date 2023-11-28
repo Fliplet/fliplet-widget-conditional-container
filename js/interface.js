@@ -65,7 +65,7 @@ Fliplet.Widget.generateInterface({
       ready: function(el) {
         // action on expand/collapse all
         let collapseButton = $(el).find('.list-field .expand-items');
-        var $panelTitle = $('.panel-title');
+        let $panelTitle = $('.panel-title');
 
         collapseButton.on('click', function() {
           if (
@@ -128,13 +128,13 @@ Fliplet.Widget.generateInterface({
             .find('[data-field="user_value"] input[type="text"]')
             .val();
 
-          const titleName = visibility && key && condition && value
+          let titleName = visibility && key && condition && value
             ? `${visibility.charAt(0).toUpperCase()
                + visibility.slice(1)} if "${key}" ${condition.toLowerCase()} 
                "${value}"`
             : 'Incomplete condition';
 
-          const arrayOfFields = Fliplet.Helper.field('conditions').get();
+          let arrayOfFields = Fliplet.Helper.field('conditions').get();
 
           arrayOfFields[index][0].value = titleName;
           panelTitle.find('.panel-title-text').text(titleName);

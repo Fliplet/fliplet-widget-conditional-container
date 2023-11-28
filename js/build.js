@@ -1,7 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable new-cap */
-/* eslint-disable max-depth */
-/* eslint-disable max-statements */
 /* eslint-disable no-eval */
 Fliplet.Widget.instance({
   name: 'conditional-container',
@@ -12,14 +8,14 @@ Fliplet.Widget.instance({
   },
   views: [
     {
-      name: 'dt-content',
+      name: 'dtContent',
       displayName: 'Drag&drop area',
       placeholder: '<div class="well text-center">Add components here.</div>'
     }
   ],
   render: {
     template: [
-      '<div class="conditional" data-view="dt-content"></div>'
+      '<div class="conditional" data-view="dtContent"></div>'
     ].join(''),
     beforeReady: function() {
       let element = $(this.$el);
@@ -27,10 +23,8 @@ Fliplet.Widget.instance({
       element.toggleClass('edit', Fliplet.Env.get('interact'));
     },
     ready: async function() {
-      await Fliplet.Widget.initializeChildren(this.$el, this);
-
-      var result;
-      const userNotLoggedMessage = 'User is not logged in';
+      let result;
+      let userNotLoggedMessage = 'User is not logged in';
 
       function getType(elem) {
         if (Array.isArray(elem)) {
@@ -41,7 +35,7 @@ Fliplet.Widget.instance({
       }
 
       function decodeHTMLEntities(str) {
-        var temp = document.createElement('div');
+        let temp = document.createElement('div');
 
         temp.style.display = 'none';
         temp.innerHTML = str;
@@ -78,7 +72,7 @@ Fliplet.Widget.instance({
       }
 
       function isConditionIncluded(array, condition) {
-        const userValue = condition.user_value;
+        let userValue = condition.user_value;
 
         if (array.includes(userValue) || array.some(value => typeof value === 'number' && value === Number(userValue))) {
           return setResult(condition.visibility);
@@ -93,70 +87,75 @@ Fliplet.Widget.instance({
 
       return Fliplet.Session.get()
         .then(async function onSessionRetrieved(session) {
-          if (session && session.entries) {
-            if (session.entries.dataSource) {
-              let user = session.entries.dataSource.data;
+          if (!session || !session.entries || !session.entries.dataSource) {
+            if (isPreview) {
+              return Fliplet.UI.Toast(userNotLoggedMessage);
+            }
 
-              if (conditions) {
-                for (let i = 0; i < conditions.length; i++) {
-                  const condition = conditions[i];
-                  const userKey = condition['user_key'];
+            return Promise.resolve(true);
+          }
 
-                  if (user.hasOwnProperty(userKey)) {
-                    let expression;
-                    let logic = condition.logic;
+          let user = session.entries.dataSource.data;
 
-                    if (logic !== 'contains') {
-                      expression = '"' + user[userKey] + '"';
+          if (conditions) {
+            for (let i = 0; i < conditions.length; i++) {
+              let condition = conditions[i];
+              let userKey = condition['user_key'];
 
-                      if (logic === 'equal') {
-                        expression += ' === ' + '"' + condition.user_value + '"';
-                      } else if (logic === 'not-equal') {
-                        expression += ' !== ' + '"' + condition.user_value + '"';
-                      }
+              if (user.hasOwnProperty(userKey)) {
+                let expression;
+                let logic = condition.logic;
 
-                      setResult(evaluate(condition, expression));
-                    } else {
-                      let keyType = getType(user[userKey]);
+                if (logic !== 'contains') {
+                  expression = '"' + user[userKey] + '"';
 
-                      if (keyType === 'array') {
-                        isConditionIncluded(user[userKey], condition);
-                      } else if (keyType === 'string') {
-                        // check if string can be parsed into JSON array
-                        let parsedType = getParsedType(user[userKey]);
+                  if (logic === 'equal') {
+                    expression += ' === ' + '"' + condition.user_value + '"';
+                  } else if (logic === 'not-equal') {
+                    expression += ' !== ' + '"' + condition.user_value + '"';
+                  }
 
-                        if (parsedType === 'array') {
-                          let currentArray = JSON.parse(user[userKey]);
+                  setResult(evaluate(condition, expression));
+                } else {
+                  let keyType = getType(user[userKey]);
 
-                          isConditionIncluded(currentArray, condition);
-                        } else {
-                          expression = user[userKey]
-                            .split(',')
-                            .map(el => el.trim())
-                            .includes(decodeHTMLEntities(condition.user_value));
-                          setResult(evaluate(condition, expression));
-                        }
+                  switch (keyType) {
+                    case 'array':
+                      isConditionIncluded(user[userKey], condition);
+                      break;
+                    case 'string':
+                      // check if string can be parsed into JSON array
+                      let parsedType = getParsedType(user[userKey]);
+
+                      if (parsedType === 'array') {
+                        let currentArray = JSON.parse(user[userKey]);
+
+                        isConditionIncluded(currentArray, condition);
                       } else {
-                        // other type but array or string
-                        expression = '"' + user[userKey] + '".indexOf("' + condition.user_value + '") > -1';
+                        expression = user[userKey]
+                          .split(',')
+                          .map(el => el.trim())
+                          .includes(decodeHTMLEntities(condition.user_value));
                         setResult(evaluate(condition, expression));
                       }
-                    }
-                  } else if (isPreview) {
-                    Fliplet.UI.Toast(`User doesn't contain key: ${userKey}`);
+
+                      break;
+                    default:
+                      // other type but array or string
+                      expression = '"' + user[userKey] + '".indexOf("' + condition.user_value + '") > -1';
+                      setResult(evaluate(condition, expression));
+                      break;
                   }
                 }
+              } else if (isPreview) {
+                Fliplet.UI.Toast(`User doesn't contain key: ${userKey}`);
               }
-
-              if (result) {
-                $(helper.el).removeClass('hidden');
-                await Fliplet.Widget.initializeChildren(helper.$el, helper);
-              }
-            } else if (isPreview) {
-              Fliplet.UI.Toast(userNotLoggedMessage);
             }
-          } else if (isPreview) {
-            Fliplet.UI.Toast(userNotLoggedMessage);
+          }
+
+          if (result) {
+            $(helper.el).removeClass('hidden');
+            await Fliplet.Widget.initializeChildren(helper.$el, helper);
           }
 
           return Promise.resolve(true);
