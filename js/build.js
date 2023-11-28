@@ -23,6 +23,10 @@ Fliplet.Widget.instance({
       element.toggleClass('edit', Fliplet.Env.get('interact'));
     },
     ready: async function() {
+      if (Fliplet.Env.get('interact')) {
+        return Promise.resolve(true);
+      }
+
       let result;
       let userNotLoggedMessage = 'User is not logged in';
 
