@@ -24,6 +24,8 @@ Fliplet.Widget.instance({
     },
     ready: async function() {
       if (Fliplet.Env.get('interact')) {
+        await Fliplet.Widget.initializeChildren(helper.$el, helper);
+
         return Promise.resolve(true);
       }
 
