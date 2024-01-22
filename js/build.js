@@ -23,6 +23,8 @@ Fliplet.Widget.instance({
       element.toggleClass('edit', Fliplet.Env.get('interact'));
     },
     ready: async function() {
+      let helper = this;
+
       if (Fliplet.Env.get('interact')) {
         await Fliplet.Widget.initializeChildren(helper.$el, helper);
 
@@ -85,7 +87,6 @@ Fliplet.Widget.instance({
         }
       }
 
-      let helper = this;
       let conditions = this.fields.conditions;
       let isPreview = Fliplet.Env.get('preview');
 
