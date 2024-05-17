@@ -1,6 +1,6 @@
 /* eslint-disable no-eval */
 Fliplet.Widget.instance({
-  name: 'conditional-container',
+  name: 'conditional-container-2-0-0',
   displayName: 'Conditional container',
   icon: 'fa-file-code-o',
   data: {
