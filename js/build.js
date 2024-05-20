@@ -25,11 +25,11 @@ Fliplet.Widget.instance({
     ready: async function() {
       let helper = this;
 
-      if (Fliplet.Env.get('interact')) {
-        await Fliplet.Widget.initializeChildren(helper.$el, helper);
+      // if (Fliplet.Env.get('interact')) {
+      await Fliplet.Widget.initializeChildren(helper.$el, helper);
 
-        return Promise.resolve(true);
-      }
+      //   return Promise.resolve(true);
+      // }
 
       let result;
       let userNotLoggedMessage = 'User is not logged in';
