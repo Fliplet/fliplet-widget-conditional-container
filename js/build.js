@@ -1,6 +1,6 @@
 /* eslint-disable no-eval */
 Fliplet.Widget.instance({
-  name: 'conditional-container-2-0-0',
+  name: 'conditional-container',
   displayName: 'Conditional container',
   icon: 'fa-file-code-o',
   data: {
@@ -25,11 +25,11 @@ Fliplet.Widget.instance({
     ready: async function() {
       let helper = this;
 
-      // if (Fliplet.Env.get('interact')) {
-      await Fliplet.Widget.initializeChildren(helper.$el, helper);
+      if (Fliplet.Env.get('interact')) {
+        await Fliplet.Widget.initializeChildren(helper.$el, helper);
 
-      //   return Promise.resolve(true);
-      // }
+        return Promise.resolve(true);
+      }
 
       let result;
       let userNotLoggedMessage = 'User is not logged in';
