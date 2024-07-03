@@ -42,6 +42,7 @@ Fliplet.Widget.generateInterface({
           name: 'user_key',
           type: 'text',
           label: 'Data field',
+          description: 'Enter column title from the user data source',
           required: true
         },
         {

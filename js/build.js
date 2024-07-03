@@ -1,4 +1,3 @@
-/* eslint-disable no-eval */
 Fliplet.Widget.instance({
   name: 'conditional-container',
   displayName: 'Conditional container',
