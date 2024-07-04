@@ -41,7 +41,7 @@ Fliplet.Widget.generateInterface({
         {
           name: 'user_key',
           type: 'text',
-          label: 'Enter data column name to create a logic',
+          label: 'Enter login data source column name to create a logic',
           description: '(e.g. user type column “admin” equals “yes”)',
           required: true
         },

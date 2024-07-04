@@ -9,7 +9,7 @@ Fliplet.Widget.instance({
     {
       name: 'dtContent',
       displayName: 'Drag&drop area',
-      placeholder: '<div class="well text-center">Add components here.</div>'
+      placeholder: '<div class="well text-center">Configure Conditional container and drag & drop components inside it</div>'
     }
   ],
   render: {
