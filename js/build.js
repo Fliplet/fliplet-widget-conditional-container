@@ -30,7 +30,8 @@ Fliplet.Widget.instance({
         await Fliplet.Widget.initializeChildren(helper.$el, helper);
 
         if (conditions && conditions.length) {
-          $('.well.text-center').html('');
+          $('.well.text-center').html('').removeClass('well');
+          helper.$el('border', '1px dotted orange');
         }
 
         return Promise.resolve(true);
