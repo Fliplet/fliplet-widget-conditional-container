@@ -104,6 +104,10 @@ Fliplet.Widget.instance({
           let user = session.entries.dataSource.data;
 
           if (conditions) {
+            if (Fliplet.Env.get('interact')) {
+              $('.well.text-center').html('');
+            }
+
             for (let i = 0; i < conditions.length; i++) {
               let condition = conditions[i];
               let userKey = condition['user_key'];
