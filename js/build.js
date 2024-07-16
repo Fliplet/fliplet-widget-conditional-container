@@ -31,7 +31,7 @@ Fliplet.Widget.instance({
 
         if (conditions && conditions.length) {
           $('.well.text-center').html('').removeClass('well');
-          helper.$el('border', '1px dotted orange');
+          helper.$el.css('border', '1px dotted orange');
         }
 
         return Promise.resolve(true);
