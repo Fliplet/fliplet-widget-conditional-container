@@ -23,9 +23,15 @@ Fliplet.Widget.instance({
     },
     ready: async function() {
       let helper = this;
+      let conditions = this.fields.conditions;
+      let isPreview = Fliplet.Env.get('preview');
 
       if (Fliplet.Env.get('interact')) {
         await Fliplet.Widget.initializeChildren(helper.$el, helper);
+
+        if (conditions && conditions.length) {
+          ('.well.text-center').html('');
+        }
 
         return Promise.resolve(true);
       }
@@ -86,9 +92,6 @@ Fliplet.Widget.instance({
         }
       }
 
-      let conditions = this.fields.conditions;
-      let isPreview = Fliplet.Env.get('preview');
-
       $(helper.el).addClass('hidden'); // by default button is hidden
 
       return Fliplet.Session.get()
@@ -104,10 +107,6 @@ Fliplet.Widget.instance({
           let user = session.entries.dataSource.data;
 
           if (conditions) {
-            if (Fliplet.Env.get('interact')) {
-              $('.well.text-center').html('');
-            }
-
             for (let i = 0; i < conditions.length; i++) {
               let condition = conditions[i];
               let userKey = condition['user_key'];
