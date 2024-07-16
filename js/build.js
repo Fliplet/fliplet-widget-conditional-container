@@ -30,7 +30,7 @@ Fliplet.Widget.instance({
         await Fliplet.Widget.initializeChildren(helper.$el, helper);
 
         if (conditions && conditions.length) {
-          ('.well.text-center').html('');
+          $('.well.text-center').html('');
         }
 
         return Promise.resolve(true);
