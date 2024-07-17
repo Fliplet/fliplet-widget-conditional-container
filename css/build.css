@@ -6,6 +6,7 @@
   border: 5px solid #D4D4D4!important;
   color: #6A6868!important;
   font-size: 12px!important;
+  font-family: "Open Sans", sans-serif;
 }
 
 .mode-interact [data-name="Conditional container"] {
