@@ -46,3 +46,7 @@
   left: 0px;
   z-index: 9;
 }
+
+[data-widget-package="com.fliplet.conditional-container"] {
+  width: 100%;
+}
