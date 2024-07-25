@@ -71,10 +71,14 @@ Fliplet.Widget.instance({
         }
       }
 
-      function evaluate(condition, expression) {
+      function evaluate(condition, expression, notEqual) {
         try {
           if (eval(expression)) {
             return condition['visibility'];
+          }
+
+          if (notEqual) {
+            return condition['visibility'] === 'hide' ? 'show' : 'hide';
           }
         } catch (error) {
           return false;
@@ -125,7 +129,7 @@ Fliplet.Widget.instance({
                     expression += ' !== ' + '"' + condition.user_value + '"';
                   }
 
-                  setResult(evaluate(condition, expression));
+                  setResult(evaluate(condition, expression, logic === 'not-equal'));
                 } else {
                   let keyType = getType(user[userKey]);
 
