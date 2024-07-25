@@ -76,8 +76,6 @@ Fliplet.Widget.instance({
           if (eval(expression)) {
             return condition['visibility'];
           }
-
-          return condition['visibility'] === 'hide' ? 'show' : 'hide';
         } catch (error) {
           return false;
         }
