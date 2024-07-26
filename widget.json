@@ -21,10 +21,7 @@
     "appAssets": []
   },
   "themeSettings": {
-    "name": "Conditional Container",
     "variablePrefix": "conditional",
-    "packages": ["com.fliplet.conditional-container"],
-    "appSupportsContainers": true,
     "variables": [
       {
         "description": "Background",
