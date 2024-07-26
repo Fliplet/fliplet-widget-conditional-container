@@ -21,7 +21,7 @@
     "appAssets": []
   },
   "themeSettings": {
-    "variablePrefix": "conditional",
+    "variablePrefix": "conditional-container",
     "variables": [
       {
         "description": "Background",
