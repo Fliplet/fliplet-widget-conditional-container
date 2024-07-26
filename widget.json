@@ -17,7 +17,7 @@
   },
   "build": {
     "dependencies": ["jquery", "bootstrap", "fliplet-core", "fliplet-helper"],
-    "assets": ["css/build.css", "js/build.js", "css/indexxx.scss"],
+    "assets": ["css/build.css", "js/build.js", "css/index.scss"],
     "appAssets": []
   },
   "themeSettings": {
