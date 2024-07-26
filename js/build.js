@@ -24,6 +24,7 @@ Fliplet.Widget.instance({
     ready: async function() {
       let helper = this;
       let conditions = this.fields.conditions;
+      let useAsConditionalContainer = this.fields.useAsConditionalContainer.includes(true);
       let isPreview = Fliplet.Env.get('preview');
 
       if (Fliplet.Env.get('interact')) {
@@ -35,6 +36,13 @@ Fliplet.Widget.instance({
         }
 
         return Promise.resolve(true);
+      }
+
+      if (useAsConditionalContainer) {
+        $(helper.el).removeClass('hidden');
+        await Fliplet.Widget.initializeChildren(helper.$el, helper);
+
+        return;
       }
 
       let result;
