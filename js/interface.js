@@ -1,6 +1,6 @@
 function handleFieldVisibility(value) {
   Fliplet.Helper.field('conditions').toggle(value);
-  $(document).find('.data-source-info').toggle(value)
+  $(document).find('.data-source-info').toggle(value);
 }
 
 Fliplet.Widget.generateInterface({
