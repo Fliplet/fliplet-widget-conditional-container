@@ -1,0 +1,433 @@
+[data-widget-package="com.fliplet.conditional-container"] {
+  width: 100%;
+  background: blue;
+  padding: 15px;
+}
+
+// /* UPDATE PACKAGE NAME AND VARIABLE PREFIX USING THE SAME VALUES AS "widget.json" */
+// $packageName: 'com.fliplet.conditional-container';
+// $variablePrefix: "conditional-container";
+
+// /* ----------------------------------------------------- */
+
+// @import "package:com.fliplet.theme.default/scss/core/variables";
+// @import "package:com.fliplet.theme.default/scss/core/mixins";
+
+// @mixin componentStyles($options: (), $widgetInstanceId: "", $widgetInstanceUUID: "") {
+//   /* LIST HERE ALL VARIABLES FROM YOUR THEME, INCLUDING TABLET AND DESKTOP */
+//   $configuration: map-merge((conditional-container-containerBackgroundImage: $conditional-container-containerBackgroundImage,
+//         conditional-container-containerBackgroundColor: $conditional-container-containerBackgroundColor,
+//         conditional-container-containerBackgroundType: $conditional-container-containerBackgroundType,
+//         conditional-container-containerBackgroundSize: $conditional-container-containerBackgroundSize,
+//         conditional-container-containerBackgroundRepeat: $conditional-container-containerBackgroundRepeat,
+//         conditional-container-containerBackgroundPosX: $conditional-container-containerBackgroundPosX,
+//         conditional-container-containerBackgroundPosY: $conditional-container-containerBackgroundPosY,
+//         conditional-container-containerWidth: $conditional-container-containerWidth,
+//         conditional-container-containerHeight: $conditional-container-containerHeight,
+//         conditional-container-containerMinWidth: $conditional-container-containerMinWidth,
+//         conditional-container-containerMaxWidth: $conditional-container-containerMaxWidth,
+//         conditional-container-containerMinHeight: $conditional-container-containerMinHeight,
+//         conditional-container-containerMaxHeight: $conditional-container-containerMaxHeight,
+//         conditional-container-containerOverflowX: $conditional-container-containerOverflowX,
+//         conditional-container-containerOverflowY: $conditional-container-containerOverflowY,
+//         conditional-container-containerPosition: $conditional-container-containerPosition,
+//         conditional-container-containerDisplay: $conditional-container-containerDisplay,
+//         conditional-container-containerVisibility: $conditional-container-containerVisibility,
+//         conditional-container-containerContentLayout: $conditional-container-containerContentLayout,
+//         conditional-container-containerFlexDirection: $conditional-container-containerFlexDirection,
+//         conditional-container-containerFlexAlign: $conditional-container-containerFlexAlign,
+//         conditional-container-containerFlexJustify: $conditional-container-containerFlexJustify,
+//         conditional-container-containerFlexWrap: $conditional-container-containerFlexWrap,
+//         conditional-container-containerPositionTop: $conditional-container-containerPositionTop,
+//         conditional-container-containerPositionRight: $conditional-container-containerPositionRight,
+//         conditional-container-containerPositionBottom: $conditional-container-containerPositionBottom,
+//         conditional-container-containerPositionLeft: $conditional-container-containerPositionLeft,
+//         conditional-container-containerMarginTop: $conditional-container-containerMarginTop,
+//         conditional-container-containerMarginRight: $conditional-container-containerMarginRight,
+//         conditional-container-containerMarginBottom: $conditional-container-containerMarginBottom,
+//         conditional-container-containerMarginLeft: $conditional-container-containerMarginLeft,
+//         conditional-container-containerPaddingTop: $conditional-container-containerPaddingTop,
+//         conditional-container-containerPaddingRight: $conditional-container-containerPaddingRight,
+//         conditional-container-containerPaddingBottom: $conditional-container-containerPaddingBottom,
+//         conditional-container-containerPaddingLeft: $conditional-container-containerPaddingLeft,
+//         conditional-container-containerBorderSides: $conditional-container-containerBorderSides,
+//         conditional-container-containerBorderWidth: $conditional-container-containerBorderWidth,
+//         conditional-container-containerBorderStyle: $conditional-container-containerBorderStyle,
+//         conditional-container-containerBorderColor: $conditional-container-containerBorderColor,
+//         conditional-container-containerBorderRadius: $conditional-container-containerBorderRadius,
+//         conditional-container-containerShadowStyle: $conditional-container-containerShadowStyle,
+//         conditional-container-containerShadowXoffset: $conditional-container-containerShadowXoffset,
+//         conditional-container-containerShadowYoffset: $conditional-container-containerShadowYoffset,
+//         conditional-container-containerShadowBlur: $conditional-container-containerShadowBlur,
+//         conditional-container-containerShadowSpread: $conditional-container-containerShadowSpread,
+//         conditional-container-containerShadowColor: $conditional-container-containerShadowColor,
+//         conditional-container-containerIndex: $conditional-container-containerIndex,
+//         conditional-container-containerBackgroundImageTablet: $conditional-container-containerBackgroundImageTablet,
+//         conditional-container-containerBackgroundColorTablet: $conditional-container-containerBackgroundColorTablet,
+//         conditional-container-containerBackgroundTypeTablet: $conditional-container-containerBackgroundTypeTablet,
+//         conditional-container-containerBackgroundSizeTablet: $conditional-container-containerBackgroundSizeTablet,
+//         conditional-container-containerBackgroundRepeatTablet: $conditional-container-containerBackgroundRepeatTablet,
+//         conditional-container-containerBackgroundPosXTablet: $conditional-container-containerBackgroundPosXTablet,
+//         conditional-container-containerBackgroundPosYTablet: $conditional-container-containerBackgroundPosYTablet,
+//         conditional-container-containerWidthTablet: $conditional-container-containerWidthTablet,
+//         conditional-container-containerHeightTablet: $conditional-container-containerHeightTablet,
+//         conditional-container-containerMinWidthTablet: $conditional-container-containerMinWidthTablet,
+//         conditional-container-containerMaxWidthTablet: $conditional-container-containerMaxWidthTablet,
+//         conditional-container-containerMinHeightTablet: $conditional-container-containerMinHeightTablet,
+//         conditional-container-containerMaxHeightTablet: $conditional-container-containerMaxHeightTablet,
+//         conditional-container-containerOverflowXTablet: $conditional-container-containerOverflowXTablet,
+//         conditional-container-containerOverflowYTablet: $conditional-container-containerOverflowYTablet,
+//         conditional-container-containerPositionTablet: $conditional-container-containerPositionTablet,
+//         conditional-container-containerDisplayTablet: $conditional-container-containerDisplayTablet,
+//         conditional-container-containerVisibilityTablet: $conditional-container-containerVisibilityTablet,
+//         conditional-container-containerContentLayoutTablet: $conditional-container-containerContentLayoutTablet,
+//         conditional-container-containerFlexDirectionTablet: $conditional-container-containerFlexDirectionTablet,
+//         conditional-container-containerFlexAlignTablet: $conditional-container-containerFlexAlignTablet,
+//         conditional-container-containerFlexJustifyTablet: $conditional-container-containerFlexJustifyTablet,
+//         conditional-container-containerFlexWrapTablet: $conditional-container-containerFlexWrapTablet,
+//         conditional-container-containerPositionTopTablet: $conditional-container-containerPositionTopTablet,
+//         conditional-container-containerPositionRightTablet: $conditional-container-containerPositionRightTablet,
+//         conditional-container-containerPositionBottomTablet: $conditional-container-containerPositionBottomTablet,
+//         conditional-container-containerPositionLeftTablet: $conditional-container-containerPositionLeftTablet,
+//         conditional-container-containerMarginTopTablet: $conditional-container-containerMarginTopTablet,
+//         conditional-container-containerMarginRightTablet: $conditional-container-containerMarginRightTablet,
+//         conditional-container-containerMarginBottomTablet: $conditional-container-containerMarginBottomTablet,
+//         conditional-container-containerMarginLeftTablet: $conditional-container-containerMarginLeftTablet,
+//         conditional-container-containerPaddingTopTablet: $conditional-container-containerPaddingTopTablet,
+//         conditional-container-containerPaddingRightTablet: $conditional-container-containerPaddingRightTablet,
+//         conditional-container-containerPaddingBottomTablet: $conditional-container-containerPaddingBottomTablet,
+//         conditional-container-containerPaddingLeftTablet: $conditional-container-containerPaddingLeftTablet,
+//         conditional-container-containerBorderSidesTablet: $conditional-container-containerBorderSidesTablet,
+//         conditional-container-containerBorderWidthTablet: $conditional-container-containerBorderWidthTablet,
+//         conditional-container-containerBorderStyleTablet: $conditional-container-containerBorderStyleTablet,
+//         conditional-container-containerBorderColorTablet: $conditional-container-containerBorderColorTablet,
+//         conditional-container-containerBorderRadiusTablet: $conditional-container-containerBorderRadiusTablet,
+//         conditional-container-containerShadowStyleTablet: $conditional-container-containerShadowStyleTablet,
+//         conditional-container-containerShadowXoffsetTablet: $conditional-container-containerShadowXoffsetTablet,
+//         conditional-container-containerShadowYoffsetTablet: $conditional-container-containerShadowYoffsetTablet,
+//         conditional-container-containerShadowBlurTablet: $conditional-container-containerShadowBlurTablet,
+//         conditional-container-containerShadowSpreadTablet: $conditional-container-containerShadowSpreadTablet,
+//         conditional-container-containerShadowColorTablet: $conditional-container-containerShadowColorTablet,
+//         conditional-container-containerIndexTablet: $conditional-container-containerIndexTablet,
+//         conditional-container-containerBackgroundImageDesktop: $conditional-container-containerBackgroundImageDesktop,
+//         conditional-container-containerBackgroundColorDesktop: $conditional-container-containerBackgroundColorDesktop,
+//         conditional-container-containerBackgroundTypeDesktop: $conditional-container-containerBackgroundTypeDesktop,
+//         conditional-container-containerBackgroundSizeDesktop: $conditional-container-containerBackgroundSizeDesktop,
+//         conditional-container-containerBackgroundRepeatDesktop: $conditional-container-containerBackgroundRepeatDesktop,
+//         conditional-container-containerBackgroundPosXDesktop: $conditional-container-containerBackgroundPosXDesktop,
+//         conditional-container-containerBackgroundPosYDesktop: $conditional-container-containerBackgroundPosYDesktop,
+//         conditional-container-containerWidthDesktop: $conditional-container-containerWidthDesktop,
+//         conditional-container-containerHeightDesktop: $conditional-container-containerHeightDesktop,
+//         conditional-container-containerMinWidthDesktop: $conditional-container-containerMinWidthDesktop,
+//         conditional-container-containerMaxWidthDesktop: $conditional-container-containerMaxWidthDesktop,
+//         conditional-container-containerMinHeightDesktop: $conditional-container-containerMinHeightDesktop,
+//         conditional-container-containerMaxHeightDesktop: $conditional-container-containerMaxHeightDesktop,
+//         conditional-container-containerOverflowXDesktop: $conditional-container-containerOverflowXDesktop,
+//         conditional-container-containerOverflowYDesktop: $conditional-container-containerOverflowYDesktop,
+//         conditional-container-containerPositionDesktop: $conditional-container-containerPositionDesktop,
+//         conditional-container-containerDisplayDesktop: $conditional-container-containerDisplayDesktop,
+//         conditional-container-containerVisibilityDesktop: $conditional-container-containerVisibilityDesktop,
+//         conditional-container-containerContentLayoutDesktop: $conditional-container-containerContentLayoutDesktop,
+//         conditional-container-containerFlexDirectionDesktop: $conditional-container-containerFlexDirectionDesktop,
+//         conditional-container-containerFlexAlignDesktop: $conditional-container-containerFlexAlignDesktop,
+//         conditional-container-containerFlexJustifyDesktop: $conditional-container-containerFlexJustifyDesktop,
+//         conditional-container-containerFlexWrapDesktop: $conditional-container-containerFlexWrapDesktop,
+//         conditional-container-containerPositionTopDesktop: $conditional-container-containerPositionTopDesktop,
+//         conditional-container-containerPositionRightDesktop: $conditional-container-containerPositionRightDesktop,
+//         conditional-container-containerPositionBottomDesktop: $conditional-container-containerPositionBottomDesktop,
+//         conditional-container-containerPositionLeftDesktop: $conditional-container-containerPositionLeftDesktop,
+//         conditional-container-containerMarginTopDesktop: $conditional-container-containerMarginTopDesktop,
+//         conditional-container-containerMarginRightDesktop: $conditional-container-containerMarginRightDesktop,
+//         conditional-container-containerMarginBottomDesktop: $conditional-container-containerMarginBottomDesktop,
+//         conditional-container-containerMarginLeftDesktop: $conditional-container-containerMarginLeftDesktop,
+//         conditional-container-containerPaddingTopDesktop: $conditional-container-containerPaddingTopDesktop,
+//         conditional-container-containerPaddingRightDesktop: $conditional-container-containerPaddingRightDesktop,
+//         conditional-container-containerPaddingBottomDesktop: $conditional-container-containerPaddingBottomDesktop,
+//         conditional-container-containerPaddingLeftDesktop: $conditional-container-containerPaddingLeftDesktop,
+//         conditional-container-containerBorderSidesDesktop: $conditional-container-containerBorderSidesDesktop,
+//         conditional-container-containerBorderWidthDesktop: $conditional-container-containerBorderWidthDesktop,
+//         conditional-container-containerBorderStyleDesktop: $conditional-container-containerBorderStyleDesktop,
+//         conditional-container-containerBorderColorDesktop: $conditional-container-containerBorderColorDesktop,
+//         conditional-container-containerBorderRadiusDesktop: $conditional-container-containerBorderRadiusDesktop,
+//         conditional-container-containerShadowStyleDesktop: $conditional-container-containerShadowStyleDesktop,
+//         conditional-container-containerShadowXoffsetDesktop: $conditional-container-containerShadowXoffsetDesktop,
+//         conditional-container-containerShadowYoffsetDesktop: $conditional-container-containerShadowYoffsetDesktop,
+//         conditional-container-containerShadowBlurDesktop: $conditional-container-containerShadowBlurDesktop,
+//         conditional-container-containerShadowSpreadDesktop: $conditional-container-containerShadowSpreadDesktop,
+//         conditional-container-containerShadowColorDesktop: $conditional-container-containerShadowColorDesktop,
+//         conditional-container-containerIndexDesktop: $conditional-container-containerIndexDesktop),
+//       $options);
+
+//   $instanceSelector: '[data-widget-package="#{$packageName}"]';
+
+//   @if $widgetInstanceUUID !="" {
+//     $instanceSelector: '#{$instanceSelector}[data-uuid="#{$widgetInstanceUUID}"]';
+//   }
+
+//   @else if $widgetInstanceId !="" {
+//     $instanceSelector: '#{$instanceSelector}[data-id="#{$widgetInstanceId}"]';
+//   }
+
+//   #{$instanceSelector} {
+//     @if map-get($configuration, conditional-container-containerBackgroundType)=="Image" {
+//       @if map-get($configuration, conditional-container-containerBackgroundImage)=="none" {
+//         background-image: map-get($configuration, conditional-container-containerBackgroundImage);
+//       }
+
+//       @else {
+//         background-image: url("#{map-get($configuration, conditional-container-containerBackgroundImage)}");
+//       }
+//     }
+
+//     @else if map-get($configuration, conditional-container-containerBackgroundType)=="Color" {
+//       background-image: none;
+//       background-color: map-get($configuration, conditional-container-containerBackgroundColor);
+//     }
+
+//     @else {
+//       background-image: none;
+//       background-color: transparent;
+//     }
+
+//     background-size: map-get($configuration, conditional-container-containerBackgroundSize);
+//     background-repeat: map-get($configuration, conditional-container-containerBackgroundRepeat);
+//     background-position: map-get($configuration, conditional-container-containerBackgroundPosX) map-get($configuration, conditional-container-containerBackgroundPosY);
+
+//     position: map-get($configuration, conditional-container-containerPosition) !important;
+//     z-index: map-get($configuration, conditional-container-containerIndex);
+
+//     @if map-get($configuration, conditional-container-containerPosition) !="relative" {
+//       top: map-get($configuration, conditional-container-containerPositionTop);
+//       right: map-get($configuration, conditional-container-containerPositionRight);
+//       bottom: map-get($configuration, conditional-container-containerPositionBottom);
+//       left: map-get($configuration, conditional-container-containerPositionLeft);
+//     }
+
+//     @if map-get($configuration, conditional-container-containerVisibility)=="hidden" {
+//       display: none !important;
+//     }
+
+//     @else {
+//       @if map-get($configuration, conditional-container-containerContentLayout)=="on" {
+//         @if map-get($configuration, conditional-container-containerDisplay)=="block" {
+//           display: flex !important;
+//         }
+
+//         @else {
+//           display: inline-flex !important;
+//         }
+
+//         flex-direction: map-get($configuration, conditional-container-containerFlexDirection);
+//         align-items: map-get($configuration, conditional-container-);
+//         justify-content: map-get($configuration, conditional-container-containerFlexJustify);
+//         flex-wrap: map-get($configuration, conditional-container-);
+//       }
+
+//       @else {
+//         display: map-get($configuration, conditional-container-containerDisplay) !important;
+//       }
+//     }
+
+//     width: map-get($configuration, conditional-container-containerWidth);
+//     min-width: map-get($configuration, conditional-container-containerMinWidth);
+//     max-width: map-get($configuration, conditional-container-containerMaxWidth);
+//     height: map-get($configuration, conditional-container-containerHeight) !important;
+//     min-height: map-get($configuration, conditional-container-containerMinHeight);
+//     max-height: map-get($configuration, conditional-container-containerMaxHeight);
+//     overflow-x: map-get($configuration, conditional-container-containerOverflowX);
+//     overflow-y: map-get($configuration, conditional-container-containerOverflowY);
+//     margin: map-get($configuration, conditional-container-containerMarginTop) map-get($configuration, conditional-container-containerMarginRight) map-get($configuration, conditional-container-containerMarginBottom) map-get($configuration, conditional-container-containerMarginLeft);
+//     padding: map-get($configuration, conditional-container-containerPaddingTop) map-get($configuration, conditional-container-containerPaddingRight) map-get($configuration, conditional-container-containerPaddingBottom) map-get($configuration, conditional-container-containerPaddingLeft);
+//     @include borderOnly((borderSides: map-get($configuration, conditional-container-containerBorderSides),
+//         borderWidth: map-get($configuration, conditional-container-containerBorderWidth),
+//         borderStyle: map-get($configuration, conditional-container-containerBorderStyle),
+//         borderColor: map-get($configuration, conditional-container-containerBorderColor)));
+//     border-radius: map-get($configuration, conditional-container-containerBorderRadius);
+//     @include shadowOnly((shadowStyle: map-get($configuration, conditional-container-containerShadowStyle),
+//         shadowXOffset: map-get($configuration, conditional-container-containerShadowXoffset),
+//         shadowYOffset: map-get($configuration, conditional-container-containerShadowYoffset),
+//         shadowBlur: map-get($configuration, conditional-container-containerShadowBlur),
+//         shadowSpread: map-get($configuration, conditional-container-containerShadowSpread),
+//         shadowColor: map-get($configuration, conditional-container-containerShadowColor)));
+
+//     // Styles for tablet
+//     @include above($tabletBreakpoint) {
+//       @if map-get($configuration, conditional-container-containerBackgroundTypeTablet)=="Image" {
+//         @if map-get($configuration, conditional-container-containerBackgroundImageTablet)=="none" {
+//           background-image: map-get($configuration, conditional-container-containerBackgroundImageTablet);
+//         }
+
+//         @else {
+//           background-image: url("#{map-get($configuration, conditional-container-containerBackgroundImageTablet)}");
+//         }
+//       }
+
+//       @else if map-get($configuration, conditional-container-containerBackgroundTypeTablet)=="Color" {
+//         background-image: none;
+//         background-color: map-get($configuration, conditional-container-containerBackgroundColorTablet);
+//       }
+
+//       @else {
+//         background-image: none;
+//         background-color: transparent;
+//       }
+
+//       background-size: map-get($configuration, conditional-container-containerBackgroundSizeTablet);
+//       background-repeat: map-get($configuration, conditional-container-containerBackgroundRepeatTablet);
+//       background-position: map-get($configuration, conditional-container-containerBackgroundPosXTablet) map-get($configuration, conditional-container-containerBackgroundPosYTablet);
+
+//       position: map-get($configuration, conditional-container-containerPositionTablet) !important;
+//       z-index: map-get($configuration, conditional-container-containerIndexTablet);
+
+//       @if map-get($configuration, conditional-container-containerPositionTablet) !="relative" {
+//         top: map-get($configuration, conditional-container-containerPositionTopTablet);
+//         right: map-get($configuration, conditional-container-containerPositionRightTablet);
+//         bottom: map-get($configuration, conditional-container-containerPositionBottomTablet);
+//         left: map-get($configuration, conditional-container-containerPositionLeftTablet);
+//       }
+
+//       @if map-get($configuration, conditional-container-containerVisibilityTablet)=="hidden" {
+//         display: none !important;
+//       }
+
+//       @else {
+//         @if map-get($configuration, conditional-container-containerContentLayoutTablet)=="on" {
+//           @if map-get($configuration, conditional-container-containerDisplayTablet)=="block" {
+//             display: flex !important;
+//           }
+
+//           @else {
+//             display: inline-flex !important;
+//           }
+
+//           flex-direction: map-get($configuration, conditional-container-containerFlexDirectionTablet);
+//           align-items: map-get($configuration, conditional-container-containerFlexAlignTablet);
+//           justify-content: map-get($configuration, conditional-container-containerFlexJustifyTablet);
+//           flex-wrap: map-get($configuration, conditional-container-containerFlexWrapTablet);
+//         }
+
+//         @else {
+//           display: map-get($configuration, conditional-container-containerDisplayTablet) !important;
+//         }
+//       }
+
+//       width: map-get($configuration, conditional-container-containerWidthTablet);
+//       min-width: map-get($configuration, conditional-container-containerMinWidthTablet);
+//       max-width: map-get($configuration, conditional-container-containerMaxWidthTablet);
+//       height: map-get($configuration, conditional-container-containerHeightTablet) !important;
+//       min-height: map-get($configuration, conditional-container-containerMinHeightTablet);
+//       max-height: map-get($configuration, conditional-container-containerMaxHeightTablet);
+//       overflow-x: map-get($configuration, conditional-container-containerOverflowXTablet);
+//       overflow-y: map-get($configuration, conditional-container-containerOverflowYTablet);
+//       margin: map-get($configuration, conditional-container-containerMarginTopTablet) map-get($configuration, conditional-container-containerMarginRightTablet) map-get($configuration, conditional-container-containerMarginBottomTablet) map-get($configuration, conditional-container-containerMarginLeftTablet);
+//       padding: map-get($configuration, conditional-container-containerPaddingTopTablet) map-get($configuration, conditional-container-containerPaddingRightTablet) map-get($configuration, conditional-container-containerPaddingBottomTablet) map-get($configuration, conditional-container-containerPaddingLeftTablet);
+//       @include borderOnly((borderSides: map-get($configuration, containerBorderSidesTablet),
+//           borderWidth: map-get($configuration, conditional-container-containerBorderWidthTablet),
+//           borderStyle: map-get($configuration, conditional-container-containerBorderStyleTablet),
+//           borderColor: map-get($configuration, conditional-container-containerBorderColorTablet)));
+//       border-radius: map-get($configuration, conditional-container-containerBorderRadiusTablet);
+//       @include shadowOnly((shadowStyle: map-get($configuration, conditional-container-containerShadowStyleTablet),
+//           shadowXOffset: map-get($configuration, conditional-container-containerShadowXoffsetTablet),
+//           shadowYOffset: map-get($configuration, conditional-container-containerShadowYoffsetTablet),
+//           shadowBlur: map-get($configuration, conditional-container-containerShadowBlurTablet),
+//           shadowSpread: map-get($configuration, conditional-container-containerShadowSpreadTablet),
+//           shadowColor: map-get($configuration, conditional-container-containerShadowColorTablet)));
+//     }
+
+//     // Styles for desktop
+//     @include above($desktopBreakpoint) {
+//       @if map-get($configuration, conditional-container-containerBackgroundTypeDesktop)=="Image" {
+//         @if map-get($configuration, conditional-container-containerBackgroundImageDesktop)=="none" {
+//           background-image: map-get($configuration, conditional-container-containerBackgroundImageDesktop);
+//         }
+
+//         @else {
+//           background-image: url("#{map-get($configuration, conditional-container-containerBackgroundImageDesktop)}");
+//         }
+//       }
+
+//       @else if map-get($configuration, conditional-container-containerBackgroundTypeDesktop)=="Color" {
+//         background-image: none;
+//         background-color: map-get($configuration, conditional-container-containerBackgroundColorDesktop);
+//       }
+
+//       @else {
+//         background-image: none;
+//         background-color: transparent;
+//       }
+
+//       background-size: map-get($configuration, conditional-container-containerBackgroundSizeDesktop);
+//       background-repeat: map-get($configuration, conditional-container-containerBackgroundRepeatDesktop);
+//       background-position: map-get($configuration, conditional-container-containerBackgroundPosXDesktop) map-get($configuration, conditional-container-containerBackgroundPosYDesktop);
+
+//       position: map-get($configuration, conditional-container-containerPositionDesktop) !important;
+//       z-index: map-get($configuration, conditional-container-containerIndexDesktop);
+
+//       @if map-get($configuration, conditional-container-containerPositionDesktop) !="relative" {
+//         top: map-get($configuration, conditional-container-containerPositionTopDesktop);
+//         right: map-get($configuration, conditional-container-containerPositionRightDesktop);
+//         bottom: map-get($configuration, conditional-container-containerPositionBottomDesktop);
+//         left: map-get($configuration, conditional-container-containerPositionLeftDesktop);
+//       }
+
+//       @if map-get($configuration, conditional-container-containerVisibilityDesktop)=="hidden" {
+//         display: none !important;
+//       }
+
+//       @else {
+//         @if map-get($configuration, conditional-container-containerContentLayoutDesktop)=="on" {
+//           @if map-get($configuration, conditional-container-containerDisplayDesktop)=="block" {
+//             display: flex !important;
+//           }
+
+//           @else {
+//             display: inline-flex !important;
+//           }
+
+//           flex-direction: map-get($configuration, conditional-container-containerFlexDirectionDesktop);
+//           align-items: map-get($configuration, conditional-container-containerFlexAlignDesktop);
+//           justify-content: map-get($configuration, conditional-container-containerFlexJustifyDesktop);
+//           flex-wrap: map-get($configuration, conditional-container-containerFlexWrapDesktop);
+//         }
+
+//         @else {
+//           display: map-get($configuration, conditional-container-containerDisplayDesktop) !important;
+//         }
+//       }
+
+//       width: map-get($configuration, conditional-container-containerWidthDesktop);
+//       min-width: map-get($configuration, conditional-container-containerMinWidthDesktop);
+//       max-width: map-get($configuration, conditional-container-containerMaxWidthDesktop);
+//       height: map-get($configuration, conditional-container-containerHeightDesktop) !important;
+//       min-height: map-get($configuration, conditional-container-containerMinHeightDesktop);
+//       max-height: map-get($configuration, conditional-container-containerMaxHeightDesktop);
+//       overflow-x: map-get($configuration, conditional-container-containerOverflowXDesktop);
+//       overflow-y: map-get($configuration, conditional-container-containerOverflowYDesktop);
+//       margin: map-get($configuration, conditional-container-containerMarginTopDesktop) map-get($configuration, conditional-container-containerMarginRightDesktop) map-get($configuration, containerMarginBottomDesktop) map-get($configuration, containerMarginLeftDesktop);
+//       padding: map-get($configuration, conditional-container-containerPaddingTopDesktop) map-get($configuration, conditional-container-containerPaddingRightDesktop) map-get($configuration, containerPaddingBottomDesktop) map-get($configuration, containerPaddingLeftDesktop);
+//       @include borderOnly((borderSides: map-get($configuration, conditional-container-containerBorderSidesDesktop),
+//           borderWidth: map-get($configuration, conditional-container-containerBorderWidthDesktop),
+//           borderStyle: map-get($configuration, conditional-container-containerBorderStyleDesktop),
+//           borderColor: map-get($configuration, conditional-container-containerBorderColorDesktop)));
+//       border-radius: map-get($configuration, conditional-container-containerBorderRadiusDesktop);
+//       @include shadowOnly((shadowStyle: map-get($configuration, conditional-container-containerShadowStyleDesktop),
+//           shadowXOffset: map-get($configuration, conditional-container-containerShadowXoffsetDesktop),
+//           shadowYOffset: map-get($configuration, conditional-container-containerShadowYoffsetDesktop),
+//           shadowBlur: map-get($configuration, conditional-container-containerShadowBlurDesktop),
+//           shadowSpread: map-get($configuration, conditional-container-containerShadowSpreadDesktop),
+//           shadowColor: map-get($configuration, conditional-container-containerShadowColorDesktop)));
+//     }
+//   }
+// }
+
+// /* Export common styles */
+// @include componentStyles();
+
+// /* Export styles for each widget instance */
+// @if variable-exists(widgetInstances) {
+//   @each $widgetInstance in $widgetInstances {
+//     @if nth($widgetInstance, 2)==$variablePrefix {
+//       @include componentStyles(nth($widgetInstance, 3), nth($widgetInstance, 1), nth($widgetInstance, 4));
+//     }
+//   }
+// }
