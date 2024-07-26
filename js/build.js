@@ -38,7 +38,7 @@ Fliplet.Widget.instance({
         return Promise.resolve(true);
       }
 
-      if (useAsConditionalContainer) {
+      if (!useAsConditionalContainer) {
         $(helper.el).removeClass('hidden');
         await Fliplet.Widget.initializeChildren(helper.$el, helper);
 
