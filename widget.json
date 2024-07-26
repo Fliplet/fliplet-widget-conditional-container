@@ -8,8 +8,7 @@
   "references": ["dtContent:richContent"],
   "settings": {
     "asyncRendering": true,
-    "interfaceWidgetPackage": "com.fliplet.helper-configuration",
-    "hideThemeSettings": false
+    "interfaceWidgetPackage": "com.fliplet.helper-configuration"
   },
   "html_tag": "div",
   "interface": {

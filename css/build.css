@@ -49,4 +49,6 @@
 
 [data-widget-package="com.fliplet.conditional-container"] {
   width: 100%;
+  background: blue;
+  padding: 15px;
 }
