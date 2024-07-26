@@ -1,5 +1,5 @@
 Fliplet.Widget.instance({
-  name: 'conditional-container',
+  name: 'conditional',
   displayName: 'Conditional container',
   icon: 'fa-file-code-o',
   data: {
