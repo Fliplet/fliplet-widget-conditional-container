@@ -33,32 +33,32 @@
             "logic": {
               "None": {
                 "hide": [
-                  "containerBackgroundImage",
-                  "containerBackgroundPosX",
-                  "containerBackgroundPosY",
-                  "containerBackgroundSize",
-                  "containerBackgroundRepeat",
-                  "containerBackgroundColor"
+                  "conditional-container-containerBackgroundImage",
+                  "conditional-container-containerBackgroundPosX",
+                  "conditional-container-containerBackgroundPosY",
+                  "conditional-container-containerBackgroundSize",
+                  "conditional-container-containerBackgroundRepeat",
+                  "conditional-container-containerBackgroundColor"
                 ]
               },
               "Color": {
                 "hide": [
-                  "containerBackgroundImage",
-                  "containerBackgroundPosX",
-                  "containerBackgroundPosY",
-                  "containerBackgroundSize",
-                  "containerBackgroundRepeat"
+                  "conditional-container-containerBackgroundImage",
+                  "conditional-container-containerBackgroundPosX",
+                  "conditional-container-containerBackgroundPosY",
+                  "conditional-container-containerBackgroundSize",
+                  "conditional-container-containerBackgroundRepeat"
                 ],
-                "show": ["containerBackgroundColor"]
+                "show": ["conditional-container-containerBackgroundColor"]
               },
               "Image": {
-                "hide": ["containerBackgroundColor"],
+                "hide": ["conditional-container-containerBackgroundColor"],
                 "show": [
-                  "containerBackgroundImage",
-                  "containerBackgroundPosX",
-                  "containerBackgroundPosY",
-                  "containerBackgroundSize",
-                  "containerBackgroundRepeat"
+                  "conditional-container-containerBackgroundImage",
+                  "conditional-container-containerBackgroundPosX",
+                  "conditional-container-containerBackgroundPosY",
+                  "conditional-container-containerBackgroundSize",
+                  "conditional-container-containerBackgroundRepeat"
                 ]
               }
             },
@@ -372,26 +372,26 @@
             "logic": {
               "relative": {
                 "hide": [
-                  "containerPositionTop",
-                  "containerPositionRight",
-                  "containerPositionBottom",
-                  "containerPositionLeft"
+                  "conditional-container-containerPositionTop",
+                  "conditional-container-containerPositionRight",
+                  "conditional-container-containerPositionBottom",
+                  "conditional-container-containerPositionLeft"
                 ]
               },
               "absolute": {
                 "show": [
-                  "containerPositionTop",
-                  "containerPositionRight",
-                  "containerPositionBottom",
-                  "containerPositionLeft"
+                  "conditional-container-containerPositionTop",
+                  "conditional-container-containerPositionRight",
+                  "conditional-container-containerPositionBottom",
+                  "conditional-container-containerPositionLeft"
                 ]
               },
               "fixed": {
                 "show": [
-                  "containerPositionTop",
-                  "containerPositionRight",
-                  "containerPositionBottom",
-                  "containerPositionLeft"
+                  "conditional-container-containerPositionTop",
+                  "conditional-container-containerPositionRight",
+                  "conditional-container-containerPositionBottom",
+                  "conditional-container-containerPositionLeft"
                 ]
               }
             },
@@ -401,10 +401,10 @@
                 "properties": ["position"],
                 "type": "position",
                 "siblings": {
-                  "top": "containerPositionTop",
-                  "right": "containerPositionRight",
-                  "bottom": "containerPositionBottom",
-                  "left": "containerPositionLeft"
+                  "top": "conditional-containerPositionTop",
+                  "right": "conditional-containerPositionRight",
+                  "bottom": "conditional-containerPositionBottom",
+                  "left": "conditional-containerPositionLeft"
                 }
               }
             ],
@@ -426,10 +426,10 @@
             "columns": 12,
             "logic": {
               "block": {
-                "show": ["containerMarginAlign"]
+                "show": ["conditional-container-containerMarginAlign"]
               },
               "inline-block": {
-                "hide": ["containerMarginAlign"]
+                "hide": ["conditional-container-containerMarginAlign"]
               }
             },
             "styles": [
@@ -843,18 +843,18 @@
             "logic": {
               "on": {
                 "show": [
-                  "containerFlexDirection",
-                  "containerFlexAlign",
-                  "containerFlexJustify",
-                  "containerFlexWrap"
+                  "conditional-container-containerFlexDirection",
+                  "conditional-container-containerFlexAlign",
+                  "conditional-container-containerFlexJustify",
+                  "conditional-container-containerFlexWrap"
                 ]
               },
               "off": {
                 "hide": [
-                  "containerFlexDirection",
-                  "containerFlexAlign",
-                  "containerFlexJustify",
-                  "containerFlexWrap"
+                  "conditional-container-containerFlexDirection",
+                  "conditional-container-containerFlexAlign",
+                  "conditional-container-containerFlexJustify",
+                  "conditional-container-containerFlexWrap"
                 ]
               }
             },
@@ -1028,22 +1028,22 @@
             "default": "none",
             "logic": {
               "none": {
-                "hide": ["containerBorderWidth", "containerBorderStyle", "containerBorderColor"]
+                "hide": ["conditional-container-containerBorderWidth", "conditional-container-containerBorderStyle", "conditional-container-containerBorderColor"]
               },
               "all": {
-                "show": ["containerBorderWidth", "containerBorderStyle", "containerBorderColor"]
+                "show": ["conditional-container-containerBorderWidth", "conditional-container-containerBorderStyle", "conditional-container-containerBorderColor"]
               },
               "top": {
-                "show": ["containerBorderWidth", "containerBorderStyle", "containerBorderColor"]
+                "show": ["conditional-container-containerBorderWidth", "conditional-container-containerBorderStyle", "conditional-container-containerBorderColor"]
               },
               "right": {
-                "show": ["containerBorderWidth", "containerBorderStyle", "containerBorderColor"]
+                "show": ["conditional-container-containerBorderWidth", "conditional-container-containerBorderStyle", "conditional-container-containerBorderColor"]
               },
               "bottom": {
-                "show": ["containerBorderWidth", "containerBorderStyle", "containerBorderColor"]
+                "show": ["conditional-container-containerBorderWidth", "conditional-container-containerBorderStyle", "conditional-container-containerBorderColor"]
               },
               "left": {
-                "show": ["containerBorderWidth", "containerBorderStyle", "containerBorderColor"]
+                "show": ["conditional-container-containerBorderWidth", "conditional-container-containerBorderStyle", "conditional-container-containerBorderColor"]
               }
             },
             "styles": [
@@ -1052,10 +1052,10 @@
                 "properties": ["border"],
                 "type": "border",
                 "siblings": {
-                  "sides": "containerBorderSides",
-                  "width": "containerBorderWidth",
-                  "style": "containerBorderStyle",
-                  "color": "containerBorderColor"
+                  "sides": "conditional-containerBorderSides",
+                  "width": "conditional-containerBorderWidth",
+                  "style": "conditional-containerBorderStyle",
+                  "color": "conditional-containerBorderColor"
                 }
               }
             ],
@@ -1081,10 +1081,10 @@
                 "properties": ["border"],
                 "type": "border",
                 "siblings": {
-                  "sides": "containerBorderSides",
-                  "width": "containerBorderWidth",
-                  "style": "containerBorderStyle",
-                  "color": "containerBorderColor"
+                  "sides": "conditional-containerBorderSides",
+                  "width": "conditional-containerBorderWidth",
+                  "style": "conditional-containerBorderStyle",
+                  "color": "conditional-containerBorderColor"
                 }
               }
             ],
@@ -1109,10 +1109,10 @@
                 "properties": ["border"],
                 "type": "border",
                 "siblings": {
-                  "sides": "containerBorderSides",
-                  "width": "containerBorderWidth",
-                  "style": "containerBorderStyle",
-                  "color": "containerBorderColor"
+                  "sides": "conditional-containerBorderSides",
+                  "width": "conditional-containerBorderWidth",
+                  "style": "conditional-containerBorderStyle",
+                  "color": "conditional-containerBorderColor"
                 }
               }
             ],
@@ -1138,10 +1138,10 @@
                 "properties": ["border"],
                 "type": "border",
                 "siblings": {
-                  "sides": "containerBorderSides",
-                  "width": "containerBorderWidth",
-                  "style": "containerBorderStyle",
-                  "color": "containerBorderColor"
+                  "sides": "conditional-containerBorderSides",
+                  "width": "conditional-containerBorderWidth",
+                  "style": "conditional-containerBorderStyle",
+                  "color": "conditional-containerBorderColor"
                 }
               }
             ],
@@ -1191,29 +1191,29 @@
             "logic": {
               "none": {
                 "hide": [
-                  "containerShadowXoffset",
-                  "containerShadowYoffset",
-                  "containerShadowBlur",
-                  "containerShadowSpread",
-                  "containerShadowColor"
+                  "conditional-container-containerShadowXoffset",
+                  "conditional-container-containerShadowYoffset",
+                  "conditional-container-containerShadowBlur",
+                  "conditional-container-containerShadowSpread",
+                  "conditional-container-containerShadowColor"
                 ]
               },
               "outset": {
                 "show": [
-                  "containerShadowXoffset",
-                  "containerShadowYoffset",
-                  "containerShadowBlur",
-                  "containerShadowSpread",
-                  "containerShadowColor"
+                  "conditional-container-containerShadowXoffset",
+                  "conditional-container-containerShadowYoffset",
+                  "conditional-container-containerShadowBlur",
+                  "conditional-container-containerShadowSpread",
+                  "conditional-container-containerShadowColor"
                 ]
               },
               "inset": {
                 "show": [
-                  "containerShadowXoffset",
-                  "containerShadowYoffset",
-                  "containerShadowBlur",
-                  "containerShadowSpread",
-                  "containerShadowColor"
+                  "conditional-container-containerShadowXoffset",
+                  "conditional-container-containerShadowYoffset",
+                  "conditional-container-containerShadowBlur",
+                  "conditional-container-containerShadowSpread",
+                  "conditional-container-containerShadowColor"
                 ]
               }
             },
@@ -1223,12 +1223,12 @@
                 "properties": ["box-shadow"],
                 "type": "shadow",
                 "siblings": {
-                  "style": "containerShadowStyle",
-                  "xoffset": "containerShadowXoffset",
-                  "yoffset": "containerShadowYoffset",
-                  "blur": "containerShadowBlur",
-                  "spread": "containerShadowSpread",
-                  "color": "containerShadowColor"
+                  "style": "conditional-containerShadowStyle",
+                  "xoffset": "conditional-containerShadowXoffset",
+                  "yoffset": "conditional-containerShadowYoffset",
+                  "blur": "conditional-containerShadowBlur",
+                  "spread": "conditional-containerShadowSpread",
+                  "color": "conditional-containerShadowColor"
                 }
               }
             ],
@@ -1254,12 +1254,12 @@
                 "properties": ["box-shadow"],
                 "type": "shadow",
                 "siblings": {
-                  "style": "containerShadowStyle",
-                  "xoffset": "containerShadowXoffset",
-                  "yoffset": "containerShadowYoffset",
-                  "blur": "containerShadowBlur",
-                  "spread": "containerShadowSpread",
-                  "color": "containerShadowColor"
+                  "style": "conditional-containerShadowStyle",
+                  "xoffset": "conditional-containerShadowXoffset",
+                  "yoffset": "conditional-containerShadowYoffset",
+                  "blur": "conditional-containerShadowBlur",
+                  "spread": "conditional-containerShadowSpread",
+                  "color": "conditional-containerShadowColor"
                 }
               }
             ],
@@ -1287,12 +1287,12 @@
                 "properties": ["box-shadow"],
                 "type": "shadow",
                 "siblings": {
-                  "style": "containerShadowStyle",
-                  "xoffset": "containerShadowXoffset",
-                  "yoffset": "containerShadowYoffset",
-                  "blur": "containerShadowBlur",
-                  "spread": "containerShadowSpread",
-                  "color": "containerShadowColor"
+                  "style": "conditional-containerShadowStyle",
+                  "xoffset": "conditional-containerShadowXoffset",
+                  "yoffset": "conditional-containerShadowYoffset",
+                  "blur": "conditional-containerShadowBlur",
+                  "spread": "conditional-containerShadowSpread",
+                  "color": "conditional-containerShadowColor"
                 }
               }
             ],
@@ -1320,12 +1320,12 @@
                 "properties": ["box-shadow"],
                 "type": "shadow",
                 "siblings": {
-                  "style": "containerShadowStyle",
-                  "xoffset": "containerShadowXoffset",
-                  "yoffset": "containerShadowYoffset",
-                  "blur": "containerShadowBlur",
-                  "spread": "containerShadowSpread",
-                  "color": "containerShadowColor"
+                  "style": "conditional-containerShadowStyle",
+                  "xoffset": "conditional-containerShadowXoffset",
+                  "yoffset": "conditional-containerShadowYoffset",
+                  "blur": "conditional-containerShadowBlur",
+                  "spread": "conditional-containerShadowSpread",
+                  "color": "conditional-containerShadowColor"
                 }
               }
             ],
@@ -1352,12 +1352,12 @@
                 "properties": ["box-shadow"],
                 "type": "shadow",
                 "siblings": {
-                  "style": "containerShadowStyle",
-                  "xoffset": "containerShadowXoffset",
-                  "yoffset": "containerShadowYoffset",
-                  "blur": "containerShadowBlur",
-                  "spread": "containerShadowSpread",
-                  "color": "containerShadowColor"
+                  "style": "conditional-containerShadowStyle",
+                  "xoffset": "conditional-containerShadowXoffset",
+                  "yoffset": "conditional-containerShadowYoffset",
+                  "blur": "conditional-containerShadowBlur",
+                  "spread": "conditional-containerShadowSpread",
+                  "color": "conditional-containerShadowColor"
                 }
               }
             ],
@@ -1384,12 +1384,12 @@
                 "properties": ["box-shadow"],
                 "type": "shadow",
                 "siblings": {
-                  "style": "containerShadowStyle",
-                  "xoffset": "containerShadowXoffset",
-                  "yoffset": "containerShadowYoffset",
-                  "blur": "containerShadowBlur",
-                  "spread": "containerShadowSpread",
-                  "color": "containerShadowColor"
+                  "style": "conditional-containerShadowStyle",
+                  "xoffset": "conditional-containerShadowXoffset",
+                  "yoffset": "conditional-containerShadowYoffset",
+                  "blur": "conditional-containerShadowBlur",
+                  "spread": "conditional-containerShadowSpread",
+                  "color": "conditional-containerShadowColor"
                 }
               }
             ],
