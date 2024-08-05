@@ -50,3 +50,8 @@
 [data-widget-package="com.fliplet.conditional-container"] {
   width: 100%;
 }
+
+[data-widget-package="com.fliplet.conditional-container"] [data-view-placeholder] {
+  border: none;
+  padding: 10px;
+}
