@@ -9,7 +9,7 @@ Fliplet.Widget.instance({
     {
       name: 'dtContent',
       displayName: 'Drag&drop area',
-      placeholder: '<div class="well text-center">Configure Conditional container and drag & drop components inside it</div>'
+      placeholder: '<div class="c-container text-center">Configure Conditional container and drag & drop components inside it</div>'
     }
   ],
   render: {
@@ -30,10 +30,10 @@ Fliplet.Widget.instance({
       if (Fliplet.Env.get('interact')) {
         await Fliplet.Widget.initializeChildren(helper.$el, helper);
 
-        // if (conditions && conditions.length) {
-        $('.well.text-center').html('').removeClass('well');
-        helper.$el.css('border', '1px dotted orange');
-        // }
+        if (conditions && conditions.length) {
+          $('.c-container.text-center').html('');
+          helper.$el.css('border', '1px dotted orange');
+        }
 
         return Promise.resolve(true);
       }
