@@ -34,15 +34,16 @@
   left: 0px;
   z-index: 9;
 }
+
 .mode-interact fl-helper[name='conditional-container']:before {
-  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
   cursor: grab;
-  position: relative;
+  position: absolute;
   padding: 5px;
   font-size: 12px;
   color: white;
   background: darkorange;
-  top: -2px;
+  top: -29px;
   left: 0px;
   z-index: 9;
 }
@@ -54,4 +55,8 @@
 [data-widget-package="com.fliplet.conditional-container"] [data-view-placeholder] {
   border: none;
   padding: 10px;
+}
+
+[data-widget-package="com.fliplet.conditional-container"] {
+  position: relative;
 }
