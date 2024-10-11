@@ -48,9 +48,9 @@
   z-index: 9;
 }
 
-[data-widget-package="com.fliplet.conditional-container"] {
+/* [data-widget-package="com.fliplet.conditional-container"] {
   width: 100%;
-}
+} */
 
 [data-widget-package="com.fliplet.conditional-container"] [data-view-placeholder] {
   border: none;
