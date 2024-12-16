@@ -24,7 +24,7 @@ Fliplet.Widget.instance({
     ready: async function() {
       let helper = this;
       let conditions = this.fields.conditions;
-      let useAsConditionalContainer = this.fields.useAsConditionalContainer.includes(true);
+      let useAsConditionalContainer = this.fields.useAsConditionalContainer?.includes(true);
       let isPreview = Fliplet.Env.get('preview');
 
       if (Fliplet.Env.get('interact')) {
