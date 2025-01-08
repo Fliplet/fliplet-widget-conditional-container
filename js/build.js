@@ -1,4 +1,3 @@
-/* eslint-disable no-eval */
 Fliplet.Widget.instance({
   name: 'conditional-container',
   displayName: 'Conditional container',
@@ -10,7 +9,7 @@ Fliplet.Widget.instance({
     {
       name: 'dtContent',
       displayName: 'Drag&drop area',
-      placeholder: '<div class="well text-center">Add components here.</div>'
+      placeholder: '<div class="c-container text-center">Configure Conditional container and drag & drop components inside it</div>'
     }
   ],
   render: {
@@ -24,11 +23,26 @@ Fliplet.Widget.instance({
     },
     ready: async function() {
       let helper = this;
+      let conditions = this.fields.conditions;
+      let useAsConditionalContainer = this.fields.useAsConditionalContainer?.includes(true);
+      let isPreview = Fliplet.Env.get('preview');
 
       if (Fliplet.Env.get('interact')) {
         await Fliplet.Widget.initializeChildren(helper.$el, helper);
 
+        if (conditions && conditions.length) {
+          $('.c-container.text-center').html('');
+          helper.$el.css('border', '1px dotted orange');
+        }
+
         return Promise.resolve(true);
+      }
+
+      if (!useAsConditionalContainer) {
+        $(helper.el).removeClass('hidden');
+        await Fliplet.Widget.initializeChildren(helper.$el, helper);
+
+        return;
       }
 
       let result;
@@ -65,10 +79,14 @@ Fliplet.Widget.instance({
         }
       }
 
-      function evaluate(condition, expression) {
+      function evaluate(condition, expression, notEqual) {
         try {
           if (eval(expression)) {
             return condition['visibility'];
+          }
+
+          if (notEqual) {
+            return condition['visibility'] === 'hide' ? 'show' : 'hide';
           }
         } catch (error) {
           return false;
@@ -86,9 +104,6 @@ Fliplet.Widget.instance({
           return setResult(condition.visibility);
         }
       }
-
-      let conditions = this.fields.conditions;
-      let isPreview = Fliplet.Env.get('preview');
 
       $(helper.el).addClass('hidden'); // by default button is hidden
 
@@ -122,7 +137,7 @@ Fliplet.Widget.instance({
                     expression += ' !== ' + '"' + condition.user_value + '"';
                   }
 
-                  setResult(evaluate(condition, expression));
+                  setResult(evaluate(condition, expression, logic === 'not-equal'));
                 } else {
                   let keyType = getType(user[userKey]);
 
