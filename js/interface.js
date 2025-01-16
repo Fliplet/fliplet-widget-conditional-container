@@ -1,9 +1,14 @@
+function handleFieldVisibility(value) {
+  Fliplet.Helper.field('conditions').toggle(value);
+  $(document).find('.data-source-info').toggle(value);
+}
+
 Fliplet.Widget.generateInterface({
   title: 'Conditional container',
   fields: [
     {
       type: 'html',
-      html: `<div class="alert alert-info">
+      html: `<div class="alert alert-info data-source-info">
         <p>Please note the container will hide the components by default.</p>
         <p>
           If multiple conditions are added and a user matches more than one 
@@ -11,6 +16,21 @@ Fliplet.Widget.generateInterface({
           conditions.
         </p>
       </div>`
+    },
+    {
+      type: 'checkbox',
+      name: 'useAsConditionalContainer',
+      label: 'Use as a conditional container',
+      default: [],
+      options: [
+        { value: true, label: 'Yes' }
+      ],
+      ready: function() {
+        handleFieldVisibility(this.val().includes(true));
+      },
+      change: function(value) {
+        handleFieldVisibility(value.includes(true));
+      }
     },
     {
       name: 'conditions',
@@ -41,7 +61,8 @@ Fliplet.Widget.generateInterface({
         {
           name: 'user_key',
           type: 'text',
-          label: 'Data field',
+          label: 'Enter login data source column name to create a logic',
+          description: '(e.g. user type column “admin” equals “yes”)',
           required: true
         },
         {
