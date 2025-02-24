@@ -14,12 +14,15 @@ Fliplet.Widget.instance({
   ],
   render: {
     template: [
-      '<div class="conditional" data-view="dtContent"></div>'
+      '<div class="conditional" data-view="dtContent" role="region" aria-label="Conditional content"></div>'
     ].join(''),
     beforeReady: function() {
       let element = $(this.$el);
 
       element.toggleClass('edit', Fliplet.Env.get('interact'));
+      
+      // Add aria-hidden when content is hidden
+      element.attr('aria-hidden', 'true');
     },
     ready: async function() {
       let helper = this;
@@ -39,7 +42,7 @@ Fliplet.Widget.instance({
       }
 
       if (!useAsConditionalContainer) {
-        $(helper.el).removeClass('hidden');
+        $(helper.el).removeClass('hidden').attr('aria-hidden', 'false');
         await Fliplet.Widget.initializeChildren(helper.$el, helper);
 
         return;
@@ -105,7 +108,7 @@ Fliplet.Widget.instance({
         }
       }
 
-      $(helper.el).addClass('hidden'); // by default button is hidden
+      $(helper.el).addClass('hidden').attr('aria-hidden', 'true'); // by default content is hidden
 
       return Fliplet.Session.get()
         .then(async function onSessionRetrieved(session) {
@@ -176,7 +179,10 @@ Fliplet.Widget.instance({
           }
 
           if (result) {
-            $(helper.el).removeClass('hidden');
+            $(helper.el)
+              .removeClass('hidden')
+              .attr('aria-hidden', 'false')
+              .attr('aria-live', 'polite'); // Announce content changes to screen readers
             await Fliplet.Widget.initializeChildren(helper.$el, helper);
           }
 
