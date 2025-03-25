@@ -13,6 +13,15 @@ Fliplet.Widget.generateInterface({
       </div>`
     },
     {
+      name: 'useAsConditionalContainer',
+      label: 'Use as conditional container',
+      type: 'checkbox',
+      options: [
+        { value: true, label: 'Enable conditional container functionality' }
+      ],
+      description: 'When disabled, the container will always show its content regardless of conditions.'
+    },
+    {
       name: 'conditions',
       label: 'Conditions',
       type: 'list',
