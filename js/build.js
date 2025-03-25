@@ -9,26 +9,14 @@
   const conditionResults = {};
   const processedIds = {};
   const containersByIds = {};
-  
-  // Configure logging - enable in dev, disable in production
-  const DEBUG = Fliplet.Env.get('development') || false;
-  const log = (message, data) => {
-    if (!DEBUG) return;
-    console.group(`[Conditional Container] ${message}`);
-    if (data !== undefined) console.log(data);
-    console.groupEnd();
-  };
 
   (async () => {
     await Fliplet();
-    log('Fliplet initialized');
     
     // Register the widget instance
     Fliplet.Widget.instance('conditional-container', async function(data, parent) {
       const container = this;
       const containerId = data.id;
-      
-      log('Widget instance created', { id: containerId });
       
       // Process template
       const emptyTemplate = container.querySelector('template[name="empty"]');
@@ -51,8 +39,6 @@
       
       // Handle interact/edit mode
       if (Fliplet.Env.get('interact')) {
-        log('Running in interact/edit mode');
-        
         if (Fliplet.Interact) {
           new Fliplet.Interact.ViewContainer(container, {
             placeholder: templateContent
@@ -68,15 +54,8 @@
         ? data.useAsConditionalContainer.includes(true) 
         : !!data.useAsConditionalContainer;
       
-      log('Runtime configuration', { 
-        useAsConditional,
-        hasConditions: Array.isArray(data.conditions) && data.conditions.length > 0,
-        containerId
-      });
-      
       // If not used as conditional container, initialize children directly
       if (!useAsConditional) {
-        log('Not using conditional behavior');
         await Fliplet.Widget.initializeChildren(container, instance);
         return instance;
       }
@@ -86,8 +65,6 @@
       
       // Use cached result if this container ID has already been processed 
       if (processedIds[containerId]) {
-        log(`Using cached result for container ${containerId}`);
-        
         if (conditionResults[containerId]) {
           container.classList.remove('hidden');
           await Fliplet.Widget.initializeChildren(container, instance);
@@ -101,7 +78,6 @@
       
       // Evaluate conditions
       const result = await evaluateConditions(data);
-      log(`Condition evaluation result: ${result}`, { containerId });
       
       // Store result for future reference
       conditionResults[containerId] = result;
@@ -112,8 +88,6 @@
         
         for (const info of containersToUpdate) {
           const el = info.element;
-          
-          log('Showing container', { id: containerId });
           el.classList.remove('hidden');
           
           // Create instance for each container
@@ -140,14 +114,11 @@
    * @returns {Promise<Boolean>} Whether conditions are met
    */
   async function evaluateConditions(data) {
-    log('Evaluating conditions');
-    
     try {
       // Get user session
       const session = await Fliplet.Session.get();
       
       if (!session?.entries?.dataSource) {
-        log('User not logged in');
         if (Fliplet.Env.get('preview')) {
           Fliplet.UI.Toast('User is not logged in');
         }
@@ -193,7 +164,6 @@
         
         // If condition is met, no need to check others
         if (result) {
-          log('Matching condition found', { condition });
           return true;
         }
       }
