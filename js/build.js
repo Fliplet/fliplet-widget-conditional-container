@@ -1,99 +1,79 @@
 "use strict";
 
 // Self-executing function to contain widget code
-(async () => {
-  try {
-    // Make sure Fliplet is available
-    await Fliplet();
+(function() {
+  Fliplet.ConditionalContainer = Fliplet.ConditionalContainer || {};
+  
+  const conditionalContainerInstances = {};
 
-    // Find all conditional container widgets
-    document.querySelectorAll('[data-widget-package="com.fliplet.conditional-container"]').forEach(async (widget) => {
-      const id = widget.getAttribute('data-conditional-container-id');
+  Fliplet().then(function() {
+    // Register the widget instance
+    Fliplet.Widget.instance('conditional-container', function(data, parent) {
+      const $container = $(this);
+      const $emptyTemplate = $container.find('template[name="empty"]').eq(0);
+      const emptyTemplate = $emptyTemplate.html();
       
-      try {
-        // Load widget data
-        const data = await Fliplet.Widget.getData(id);
-        initializeWidget(widget, data);
-      } catch (error) {
-        console.error('Error loading widget data:', error);
-      }
+      $emptyTemplate.remove();
+      
+      // Create instance container
+      const container = new Promise((resolve) => {
+        const instance = {
+          id: data.id,
+          uuid: data.uuid,
+          parent
+        };
+        
+        // Handle interact/edit mode
+        if (Fliplet.Env.get('interact')) {
+          if (Fliplet.Interact) {
+            new Fliplet.Interact.ViewContainer($container, {
+              placeholder: emptyTemplate
+            });
+          }
+          
+          // Initialize children components inside the container
+          Fliplet.Widget.initializeChildren($container, instance);
+          resolve(instance);
+          return;
+        }
+        
+        // Runtime code
+        const conditions = data.conditions;
+        const useAsConditionalContainer = data.useAsConditionalContainer?.includes(true);
+        const isPreview = Fliplet.Env.get('preview');
+        
+        if (!useAsConditionalContainer) {
+          // If not used as conditional container, just initialize children
+          Fliplet.Widget.initializeChildren($container, instance).then(() => {
+            resolve(instance);
+          });
+          return;
+        }
+        
+        // By default container is hidden
+        $container.addClass('hidden');
+        
+        // Check conditions
+        checkConditions($container, data, isPreview, instance).then(() => {
+          resolve(instance);
+        });
+      });
+      
+      container.id = data.id;
+      conditionalContainerInstances[data.id] = container;
+    }, {
+      supportsDynamicContext: true
     });
-  } catch (error) {
-    console.error('Error initializing conditional container:', error);
-  }
-  
-  /**
-   * Main widget initialization function
-   * @param {HTMLElement} widget - The widget container element
-   * @param {Object} data - The widget instance data
-   */
-  function initializeWidget(widget, data) {
-    // Create container element
-    const container = document.createElement('div');
-    container.className = 'conditional';
-    
-    // Append to the widget
-    widget.appendChild(container);
-    
-    // Handle interact/edit mode
-    if (Fliplet.Env.get('interact')) {
-      container.classList.add('edit');
-      container.innerHTML = '<div class="c-container text-center">Configure Conditional container and drag & drop components inside it</div>';
-      
-      // Initialize children components inside the container
-      initializeChildrenInEditMode(container, data);
-      return;
-    }
-    
-    // Runtime code
-    const conditions = data.conditions;
-    const useAsConditionalContainer = data.useAsConditionalContainer?.includes(true);
-    const isPreview = Fliplet.Env.get('preview');
-    
-    if (!useAsConditionalContainer) {
-      // If not used as conditional container, just initialize children
-      Fliplet.Widget.initializeChildren(container);
-      return;
-    }
-    
-    // By default container is hidden
-    container.classList.add('hidden');
-    
-    // Check conditions
-    checkConditions(container, data, isPreview);
-  }
-  
-  /**
-   * Initialize children in edit mode with specific UI feedback
-   * @param {HTMLElement} container - The container element
-   * @param {Object} data - The widget instance data 
-   */
-  async function initializeChildrenInEditMode(container, data) {
-    try {
-      await Fliplet.Widget.initializeChildren(container);
-      
-      if (!data.conditions || !data.conditions.length) {
-        return;
-      }
-      
-      const placeholder = container.querySelector('.c-container.text-center');
-      if (placeholder) {
-        placeholder.innerHTML = '';
-      }
-      
-      container.style.border = '1px dotted orange';
-    } catch (error) {
-      console.error('Error initializing children:', error);
-    }
-  }
+  });
   
   /**
    * Checks conditions to determine container visibility
-   * @param {HTMLElement} container - The container element
+   * @param {jQuery} $container - The container element
    * @param {Object} data - The widget instance data
    * @param {Boolean} isPreview - Whether we're in preview mode
+   * @param {Object} instance - The widget instance
    */
-  async function checkConditions(container, data, isPreview) {
+  async function checkConditions($container, data, isPreview, instance) {
     const userNotLoggedMessage = 'User is not logged in';
     let result = false;
     
@@ -169,8 +149,8 @@
       
       // Show container if conditions are met
       if (result) {
-        container.classList.remove('hidden');
-        await Fliplet.Widget.initializeChildren(container);
+        $container.removeClass('hidden');
+        await Fliplet.Widget.initializeChildren($container, instance);
       }
     } catch (error) {
       console.error('Error checking conditions:', error);
@@ -261,4 +241,62 @@
     
     return false;
   }
+  
+  /**
+   * Get a conditional container instance by ID
+   * @param {Number|String|Object} filter - Filter by ID or properties
+   * @param {Object} options - Additional options for retrieval
+   * @returns {Promise} Promise resolving to the container instance
+   */
+  Fliplet.ConditionalContainer.get = async function(filter, options = {}) {
+    if (typeof filter === 'number' || typeof filter === 'string') {
+      filter = { id: +filter };
+    }
+
+    await Fliplet();
+ 
+    const containers = await Promise.all(Object.values(conditionalContainerInstances));
+    const objectMatch = (obj, filter) => Object.keys(filter).every(key => obj[key] === filter[key]);
+    const container = filter ? containers.find(c => objectMatch(c, filter)) : containers[0];
+
+    // Containers can render over time, so we need to retry later in the process
+    if (!container) {
+      if (options.ts > 5000) {
+        return Promise.reject(`Conditional container instance not found after ${Math.ceil(options.ts / 1000)} seconds.`);
+      }
+
+      if (options.ts === undefined) {
+        options.ts = 10;
+      } else {
+        options.ts *= 1.5; // increase ts by 50% every time
+      }
+
+      await new Promise(resolve => setTimeout(resolve, options.ts)); // sleep
+
+      return Fliplet.ConditionalContainer.get(filter, options);
+    }
+
+    return container;
+  };
+
+  /**
+   * Get all conditional container instances
+   * @param {Object|Function} filter - Filter by properties
+   * @returns {Promise} Promise resolving to container instances
+   */
+  Fliplet.ConditionalContainer.getAll = function(filter) {
+    if (typeof filter !== 'object' && typeof filter !== 'function') {
+      filter = { id: filter };
+    }
+
+    return Fliplet().then(function() {
+      return Promise.all(Object.values(conditionalContainerInstances)).then(function(containers) {
+        if (typeof filter === 'undefined') {
+          return containers;
+        }
+
+        return _.filter(containers, filter);
+      });
+    });
+  };
 })();
