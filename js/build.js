@@ -19,11 +19,12 @@
     console.groupEnd();
   };
 
-  Fliplet().then(() => {
+  (async () => {
+    await Fliplet();
     log('Fliplet initialized');
     
     // Register the widget instance
-    Fliplet.Widget.instance('conditional-container', function(data, parent) {
+    Fliplet.Widget.instance('conditional-container', async function(data, parent) {
       const container = this;
       const containerId = data.id;
       
@@ -41,108 +42,97 @@
       containersByIds[containerId].push({ element: container });
       
       // Create instance container
-      const instancePromise = new Promise(resolve => {
-        const instance = {
-          id: containerId,
-          uuid: data.uuid,
-          parent,
-          element: container
-        };
+      const instance = {
+        id: containerId,
+        uuid: data.uuid,
+        parent,
+        element: container
+      };
+      
+      // Handle interact/edit mode
+      if (Fliplet.Env.get('interact')) {
+        log('Running in interact/edit mode');
         
-        // Handle interact/edit mode
-        if (Fliplet.Env.get('interact')) {
-          log('Running in interact/edit mode');
-          
-          if (Fliplet.Interact) {
-            new Fliplet.Interact.ViewContainer(container, {
-              placeholder: templateContent
-            });
-          }
-          
-          Fliplet.Widget.initializeChildren(container, instance);
-          resolve(instance);
-          return;
-        }
-        
-        // Runtime mode
-        const useAsConditional = Array.isArray(data.useAsConditionalContainer) 
-          ? data.useAsConditionalContainer.includes(true) 
-          : !!data.useAsConditionalContainer;
-        
-        log('Runtime configuration', { 
-          useAsConditional,
-          hasConditions: Array.isArray(data.conditions) && data.conditions.length > 0,
-          containerId
-        });
-        
-        // If not used as conditional container, initialize children directly
-        if (!useAsConditional) {
-          log('Not using conditional behavior');
-          Fliplet.Widget.initializeChildren(container, instance)
-            .then(() => resolve(instance));
-          return;
-        }
-        
-        // Initially hide container
-        container.classList.add('hidden');
-        
-        // Use cached result if this container ID has already been processed 
-        if (processedIds[containerId]) {
-          log(`Using cached result for container ${containerId}`);
-          
-          if (conditionResults[containerId]) {
-            container.classList.remove('hidden');
-            Fliplet.Widget.initializeChildren(container, instance)
-              .then(() => resolve(instance));
-          } else {
-            resolve(instance);
-          }
-          return;
-        }
-        
-        // Mark as processed to avoid redundant condition checking
-        processedIds[containerId] = true;
-        
-        // Evaluate conditions
-        evaluateConditions(data)
-          .then(result => {
-            log(`Condition evaluation result: ${result}`, { containerId });
-            
-            // Store result for future reference
-            conditionResults[containerId] = result;
-            
-            if (result) {
-              // Show all containers with the same ID
-              const containersToUpdate = containersByIds[containerId] || [];
-              containersToUpdate.forEach(info => {
-                const el = info.element;
-                
-                log('Showing container', { id: containerId });
-                el.classList.remove('hidden');
-                
-                // Create instance for each container
-                const containerInstance = {
-                  id: containerId,
-                  uuid: data.uuid,
-                  parent,
-                  element: el
-                };
-                
-                Fliplet.Widget.initializeChildren(el, containerInstance);
-              });
-            }
-            
-            resolve(instance);
+        if (Fliplet.Interact) {
+          new Fliplet.Interact.ViewContainer(container, {
+            placeholder: templateContent
           });
+        }
+        
+        await Fliplet.Widget.initializeChildren(container, instance);
+        return instance;
+      }
+      
+      // Runtime mode
+      const useAsConditional = Array.isArray(data.useAsConditionalContainer) 
+        ? data.useAsConditionalContainer.includes(true) 
+        : !!data.useAsConditionalContainer;
+      
+      log('Runtime configuration', { 
+        useAsConditional,
+        hasConditions: Array.isArray(data.conditions) && data.conditions.length > 0,
+        containerId
       });
       
-      // Store instance
-      instancePromise.id = containerId;
-      containerInstances[containerId] = instancePromise;
+      // If not used as conditional container, initialize children directly
+      if (!useAsConditional) {
+        log('Not using conditional behavior');
+        await Fliplet.Widget.initializeChildren(container, instance);
+        return instance;
+      }
+      
+      // Initially hide container
+      container.classList.add('hidden');
+      
+      // Use cached result if this container ID has already been processed 
+      if (processedIds[containerId]) {
+        log(`Using cached result for container ${containerId}`);
+        
+        if (conditionResults[containerId]) {
+          container.classList.remove('hidden');
+          await Fliplet.Widget.initializeChildren(container, instance);
+        }
+        
+        return instance;
+      }
+      
+      // Mark as processed to avoid redundant condition checking
+      processedIds[containerId] = true;
+      
+      // Evaluate conditions
+      const result = await evaluateConditions(data);
+      log(`Condition evaluation result: ${result}`, { containerId });
+      
+      // Store result for future reference
+      conditionResults[containerId] = result;
+      
+      if (result) {
+        // Show all containers with the same ID
+        const containersToUpdate = containersByIds[containerId] || [];
+        
+        for (const info of containersToUpdate) {
+          const el = info.element;
+          
+          log('Showing container', { id: containerId });
+          el.classList.remove('hidden');
+          
+          // Create instance for each container
+          const containerInstance = {
+            id: containerId,
+            uuid: data.uuid,
+            parent,
+            element: el
+          };
+          
+          await Fliplet.Widget.initializeChildren(el, containerInstance);
+        }
+      }
+      
+      return instance;
     }, {
       supportsDynamicContext: true
     });
-  });
+  })();
   
   /**
    * Evaluates container conditions against user data
@@ -264,7 +254,7 @@
    * Get a conditional container instance by ID
    * @param {Number|String|Object} filter - Filter by ID or properties
    * @param {Object} options - Additional options
-   * @returns {Promise} Promise resolving to the container instance
+   * @returns {Promise<Object>} Container instance
    */
   Fliplet.ConditionalContainer.get = async function(filter, options = {}) {
     const idFilter = typeof filter === 'number' || typeof filter === 'string'
@@ -298,25 +288,24 @@
   /**
    * Get all conditional container instances
    * @param {Object|Function} filter - Filter by properties
-   * @returns {Promise} Promise resolving to container instances
+   * @returns {Promise<Array>} Container instances
    */
-  Fliplet.ConditionalContainer.getAll = function(filter) {
+  Fliplet.ConditionalContainer.getAll = async function(filter) {
     if (typeof filter !== 'object' && typeof filter !== 'function') {
       filter = { id: filter };
     }
 
-    return Fliplet().then(() => {
-      return Promise.all(Object.values(containerInstances)).then(containers => {
-        if (!filter) return containers;
+    await Fliplet();
+    const containers = await Promise.all(Object.values(containerInstances));
+    
+    if (!filter) return containers;
 
-        return containers.filter(container => {
-          if (typeof filter === 'function') {
-            return filter(container);
-          }
-          
-          return Object.keys(filter).every(key => container[key] === filter[key]);
-        });
-      });
+    return containers.filter(container => {
+      if (typeof filter === 'function') {
+        return filter(container);
+      }
+      
+      return Object.keys(filter).every(key => container[key] === filter[key]);
     });
   };
   
