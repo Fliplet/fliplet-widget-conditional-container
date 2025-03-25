@@ -16,7 +16,7 @@
     "assets": ["js/interface.js"]
   },
   "build": {
-    "dependencies": ["jquery", "bootstrap", "fliplet-core"],
+    "dependencies": ["bootstrap", "fliplet-core"],
     "assets": ["css/build.css", "js/build.js", "css/index.scss"],
     "appAssets": []
   },
