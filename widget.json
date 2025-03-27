@@ -5,7 +5,7 @@
   "icon": "img/icon.png",
   "tags": ["type:component", "category:layout", "beta:true"],
   "provider_only": false,
-  "references": ["content:richContent"],
+  "references": ["dtContent:richContent"],
   "settings": {
     "asyncRendering": true,
     "interfaceWidgetPackage": "com.fliplet.helper-configuration"
@@ -16,7 +16,7 @@
     "assets": ["js/interface.js"]
   },
   "build": {
-    "dependencies": ["bootstrap", "fliplet-core"],
+    "dependencies": ["jquery", "bootstrap", "fliplet-core", "fliplet-helper"],
     "assets": ["css/build.css", "js/build.js", "css/index.scss"],
     "appAssets": []
   },
