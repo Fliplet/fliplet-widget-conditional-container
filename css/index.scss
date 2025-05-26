@@ -213,9 +213,9 @@ $variablePrefix: "conditional-container";
           }
 
           flex-direction: map-get($configuration, conditional-container-containerFlexDirection);
-          align-items: map-get($configuration, conditional-container-);
+          align-items: map-get($configuration, conditional-container-containerFlexAlign);
           justify-content: map-get($configuration, conditional-container-containerFlexJustify);
-          flex-wrap: map-get($configuration, conditional-container-);
+          flex-wrap: map-get($configuration, conditional-container-containerFlexWrap);
         }
 
         @else {
