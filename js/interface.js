@@ -24,7 +24,13 @@ Fliplet.Widget.generateInterface({
       options: [
         { value: true, label: 'Enable conditional container functionality' }
       ],
-      description: 'When disabled, the container will always show its content regardless of conditions.'
+      description: 'When disabled, the container will always show its content regardless of conditions.',
+      ready: function() {
+        handleFieldVisibility(this.val().includes(true));
+      },
+      change: function(value) {
+        handleFieldVisibility(value.includes(true));
+      }
     },
     {
       name: 'conditions',
