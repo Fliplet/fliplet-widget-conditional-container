@@ -178,7 +178,7 @@ Fliplet.Widget.instance({
             }
           }
 
-          if (result) {
+          if (result && helper.parent.entry.data.email === user.email) {
             $(helper.el)
               .removeClass('hidden')
               .attr('aria-hidden', 'false')
