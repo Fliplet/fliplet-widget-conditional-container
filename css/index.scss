@@ -202,29 +202,23 @@ $variablePrefix: "conditional-container";
     }
 
     @else {
-      &:not(.hidden) {
-        @if map-get($configuration, conditional-container-containerContentLayout)=="on" {
-          @if map-get($configuration, conditional-container-containerDisplay)=="block" {
-            display: flex !important;
-          }
-
-          @else {
-            display: inline-flex !important;
-          }
-
-          flex-direction: map-get($configuration, conditional-container-containerFlexDirection);
-          align-items: map-get($configuration, conditional-container-);
-          justify-content: map-get($configuration, conditional-container-containerFlexJustify);
-          flex-wrap: map-get($configuration, conditional-container-);
+      @if map-get($configuration, conditional-container-containerContentLayout)=="on" {
+        @if map-get($configuration, conditional-container-containerDisplay)=="block" {
+          display: flex !important;
         }
 
         @else {
-          display: map-get($configuration, conditional-container-containerDisplay) !important;
+          display: inline-flex !important;
         }
+
+        flex-direction: map-get($configuration, conditional-container-containerFlexDirection);
+        align-items: map-get($configuration, conditional-container-);
+        justify-content: map-get($configuration, conditional-container-containerFlexJustify);
+        flex-wrap: map-get($configuration, conditional-container-);
       }
-      
-      &.hidden {
-        display: none !important;
+
+      @else {
+        display: map-get($configuration, conditional-container-containerDisplay) !important;
       }
     }
 
@@ -291,25 +285,23 @@ $variablePrefix: "conditional-container";
       }
 
       @else {
-        &:not(.hidden) {
-          @if map-get($configuration, conditional-container-containerContentLayoutTablet)=="on" {
-            @if map-get($configuration, conditional-container-containerDisplayTablet)=="block" {
-              display: flex !important;
-            }
-
-            @else {
-              display: inline-flex !important;
-            }
-
-            flex-direction: map-get($configuration, conditional-container-containerFlexDirectionTablet);
-            align-items: map-get($configuration, conditional-container-containerFlexAlignTablet);
-            justify-content: map-get($configuration, conditional-container-containerFlexJustifyTablet);
-            flex-wrap: map-get($configuration, conditional-container-containerFlexWrapTablet);
+        @if map-get($configuration, conditional-container-containerContentLayoutTablet)=="on" {
+          @if map-get($configuration, conditional-container-containerDisplayTablet)=="block" {
+            display: flex !important;
           }
 
           @else {
-            display: map-get($configuration, conditional-container-containerDisplayTablet) !important;
+            display: inline-flex !important;
           }
+
+          flex-direction: map-get($configuration, conditional-container-containerFlexDirectionTablet);
+          align-items: map-get($configuration, conditional-container-containerFlexAlignTablet);
+          justify-content: map-get($configuration, conditional-container-containerFlexJustifyTablet);
+          flex-wrap: map-get($configuration, conditional-container-containerFlexWrapTablet);
+        }
+
+        @else {
+          display: map-get($configuration, conditional-container-containerDisplayTablet) !important;
         }
       }
 
@@ -377,25 +369,23 @@ $variablePrefix: "conditional-container";
       }
 
       @else {
-        &:not(.hidden) {
-          @if map-get($configuration, conditional-container-containerContentLayoutDesktop)=="on" {
-            @if map-get($configuration, conditional-container-containerDisplayDesktop)=="block" {
-              display: flex !important;
-            }
-
-            @else {
-              display: inline-flex !important;
-            }
-
-            flex-direction: map-get($configuration, conditional-container-containerFlexDirectionDesktop);
-            align-items: map-get($configuration, conditional-container-containerFlexAlignDesktop);
-            justify-content: map-get($configuration, conditional-container-containerFlexJustifyDesktop);
-            flex-wrap: map-get($configuration, conditional-container-containerFlexWrapDesktop);
+        @if map-get($configuration, conditional-container-containerContentLayoutDesktop)=="on" {
+          @if map-get($configuration, conditional-container-containerDisplayDesktop)=="block" {
+            display: flex !important;
           }
 
           @else {
-            display: map-get($configuration, conditional-container-containerDisplayDesktop) !important;
+            display: inline-flex !important;
           }
+
+          flex-direction: map-get($configuration, conditional-container-containerFlexDirectionDesktop);
+          align-items: map-get($configuration, conditional-container-containerFlexAlignDesktop);
+          justify-content: map-get($configuration, conditional-container-containerFlexJustifyDesktop);
+          flex-wrap: map-get($configuration, conditional-container-containerFlexWrapDesktop);
+        }
+
+        @else {
+          display: map-get($configuration, conditional-container-containerDisplayDesktop) !important;
         }
       }
 
