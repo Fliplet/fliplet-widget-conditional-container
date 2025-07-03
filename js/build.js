@@ -20,7 +20,7 @@ Fliplet.Widget.instance({
       let element = $(this.$el);
 
       element.toggleClass('edit', Fliplet.Env.get('interact'));
-
+      
       // Add aria-hidden when content is hidden
       element.attr('aria-hidden', 'true');
     },
@@ -178,7 +178,7 @@ Fliplet.Widget.instance({
             }
           }
 
-          if (result && helper.parent.entry.data.email === user.email) {
+          if (result) {
             $(helper.el)
               .removeClass('hidden')
               .attr('aria-hidden', 'false')
