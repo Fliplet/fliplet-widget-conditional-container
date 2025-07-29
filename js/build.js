@@ -53,7 +53,6 @@
 
     // Register the widget instance
     Fliplet.Widget.instance('conditional-container', function(data, parent) {
-      // debugger;
       const container = this;
       const containerId = data.id;
 
