@@ -18,19 +18,13 @@ Fliplet.Widget.generateInterface({
       </div>`
     },
     {
-      type: 'checkbox',
       name: 'useAsConditionalContainer',
-      label: 'Use as a conditional container',
-      default: [],
+      label: 'Use as conditional container',
+      type: 'checkbox',
       options: [
-        { value: true, label: 'Yes' }
+        { value: true, label: 'Enable conditional container functionality' }
       ],
-      ready: function() {
-        handleFieldVisibility(this.val().includes(true));
-      },
-      change: function(value) {
-        handleFieldVisibility(value.includes(true));
-      }
+      description: 'When disabled, the container will always show its content regardless of conditions.'
     },
     {
       name: 'conditions',
