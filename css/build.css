@@ -1,11 +1,11 @@
 .mode-interact fl-helper[name="conditional-container"].edit.hidden {
-  display: block!important;
+  display: block !important;
 }
 
 .mode-interact .view-is-empty {
-  border: 1px dotted #D4D4D4!important;
-  color: #6A6868!important;
-  font-size: 12px!important;
+  border: 1px dotted #d4d4d4 !important;
+  color: #6a6868 !important;
+  font-size: 12px !important;
   font-family: "Open Sans", sans-serif;
 }
 
@@ -15,14 +15,14 @@
   /* padding: 15px 0; */
 }
 
-.mode-interact fl-helper[name='conditional-container']::before {
-  content: 'Conditional container';
+.mode-interact fl-helper[name="conditional-container"]::before {
+  content: "Conditional container";
 }
-.mode-interact [data-name='conditional-container']::before {
-  content: 'Conditional container';
+.mode-interact [data-name="conditional-container"]::before {
+  content: "Conditional container";
 }
 
-.mode-interact [data-name='conditional-container']:before {
+.mode-interact [data-name="conditional-container"]:before {
   border-bottom-right-radius: 10px;
   cursor: grab;
   position: relative;
@@ -35,7 +35,7 @@
   z-index: 9;
 }
 
-.mode-interact fl-helper[name='conditional-container']:before {
+.mode-interact fl-helper[name="conditional-container"]:before {
   border-top-right-radius: 10px;
   cursor: grab;
   position: absolute;
@@ -59,4 +59,9 @@
 
 [data-widget-package="com.fliplet.conditional-container"] {
   position: relative;
+}
+
+/* Runtime visibility control: hide the container when conditions are not met */
+[data-widget-package="com.fliplet.conditional-container"].hidden {
+  display: none !important;
 }
