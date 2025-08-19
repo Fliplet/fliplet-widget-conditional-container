@@ -287,7 +287,6 @@
         return lastMatchedVisibility === 'show';
       }
 
-
       if (hasShowCondition) {
         return false;
       }
