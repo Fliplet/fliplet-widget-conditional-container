@@ -11,8 +11,8 @@ Fliplet.Widget.generateInterface({
       html: `<div class="alert alert-info data-source-info">
         <p>Please note the container will hide the components by default.</p>
         <p>
-          If multiple conditions are added and a user matches more than one 
-          condition, the last condition will overwrite the previous 
+          If multiple conditions are added and a user matches more than one
+          condition, the last condition will overwrite the previous
           conditions.
         </p>
       </div>`
@@ -151,7 +151,7 @@ Fliplet.Widget.generateInterface({
 
           let titleName = visibility && key && condition && value
             ? `${visibility.charAt(0).toUpperCase()
-               + visibility.slice(1)} if "${key}" ${condition.toLowerCase()} 
+               + visibility.slice(1)} if "${key}" ${condition.toLowerCase()}
                "${value}"`
             : 'Incomplete condition';
 
