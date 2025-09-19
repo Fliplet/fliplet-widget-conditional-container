@@ -35,7 +35,7 @@
  * - Conditional Mode Toggle: Can be disabled to always show content regardless of conditions
  */
 
-"use strict";
+'use strict';
 
 // Self-executing function to contain widget code
 (function() {
@@ -59,6 +59,7 @@
       // Process template
       const emptyTemplate = container.querySelector('template[name="empty"]');
       const templateContent = emptyTemplate ? emptyTemplate.innerHTML : '';
+
       if (emptyTemplate) {
         emptyTemplate.remove();
       }
@@ -76,7 +77,7 @@
       });
 
       // Create instance promise - keep promise structure for widget system compatibility
-      const instancePromise = new Promise(async (resolve) => {
+      const instancePromise = new Promise(async(resolve) => {
         const instance = {
           id: containerId,
           uuid: data.uuid,
@@ -95,6 +96,7 @@
 
             await Fliplet.Widget.initializeChildren(container, instance);
             resolve(instance);
+
             return;
           }
 
@@ -105,6 +107,7 @@
           if (!useAsConditional) {
             await Fliplet.Widget.initializeChildren(container, instance);
             resolve(instance);
+
             return;
           }
 
@@ -115,7 +118,6 @@
           if (processedIds[containerId]) {
             // If conditions were already evaluated and passed, show this container
             if (conditionResults[containerId]) {
-
               // Find the specific container for this parent context
               const containerInfo = containersByIds[containerId].find(info =>
                 info.element === container ||
@@ -132,6 +134,7 @@
             }
 
             resolve(instance);
+
             return;
           }
 
@@ -235,17 +238,21 @@
         if (Fliplet.Env.get('preview')) {
           Fliplet.UI.Toast('User is not logged in');
         }
-        return false;
+
+        return false; // Hidden when no valid user
       }
 
       const user = session.entries.dataSource.data;
 
-      // If no conditions defined, return false
+      // If no conditions defined, return false (hidden)
       if (!Array.isArray(data.conditions) || !data.conditions.length) {
         return false;
       }
 
-      // Check each condition
+      let hasShowCondition = false;
+      let hasHideCondition = false;
+      let lastMatchedVisibility = null;
+
       for (const condition of data.conditions) {
         const dataKey = condition.user_key;
 
@@ -253,21 +260,45 @@
           if (Fliplet.Env.get('preview')) {
             Fliplet.UI.Toast(`User doesn't contain key: ${dataKey}`);
           }
+
           continue;
         }
 
         const userData = user[dataKey];
         const logic = condition.logic;
         const value = condition.user_value;
+        const visibility = condition.visibility;
 
-        if (isConditionMet(userData, logic, value, condition.visibility)) {
-          return true;
+        // Track which kinds of rules exist
+        if (visibility === 'show') {
+          hasShowCondition = true;
+        } else if (visibility === 'hide') {
+          hasHideCondition = true;
         }
+
+        // Only update visibility when the condition matches
+        if (doesConditionMatch(userData, logic, value)) {
+          lastMatchedVisibility = visibility;
+        }
+      }
+
+      // If any condition matched, last match wins
+      if (lastMatchedVisibility) {
+        return lastMatchedVisibility === 'show';
+      }
+
+      if (hasShowCondition) {
+        return false;
+      }
+
+      if (hasHideCondition) {
+        return true;
       }
 
       return false;
     } catch (error) {
       console.error('Error evaluating conditions:', error);
+
       return false;
     }
   }
@@ -289,7 +320,7 @@
    * @param {String} visibility - Show or hide behavior
    * @returns {Boolean} Whether condition is met
    */
-  function isConditionMet(userData, logic, value, visibility) {
+  function doesConditionMatch(userData, logic, value) {
     let matches = false;
 
     // Evaluate based on logic type
@@ -301,14 +332,7 @@
       matches = checkContains(userData, value);
     }
 
-    // Determine if condition result should show the container
-    if (logic === 'not-equal') {
-      // For not-equal, either show when not matching or hide when matching
-      return matches ? visibility !== 'hide' : visibility === 'hide';
-    }
-
-    // For equal and contains, only show when matching and not hiding
-    return matches && visibility !== 'hide';
+    return matches;
   }
 
   /**
@@ -329,6 +353,7 @@
       try {
         // Try parsing as JSON array
         const parsed = JSON.parse(data);
+
         if (Array.isArray(parsed)) {
           return parsed.includes(value) ||
             parsed.some(item => typeof item === 'number' && item === Number(value));
@@ -352,7 +377,9 @@
    */
   function decodeHTMLEntities(str) {
     const temp = document.createElement('div');
+
     temp.innerHTML = str;
+
     return temp.textContent || temp.innerText;
   }
 
@@ -364,6 +391,7 @@
    */
   Fliplet.ConditionalContainer.get = async function(filter, options = {}) {
     await Fliplet();
+
     const idFilter = getIdFilter(filter);
 
     const containers = await Promise.all(Object.values(containerInstances));
@@ -387,6 +415,7 @@
     if (typeof filter === 'number' || typeof filter === 'string') {
       return { id: +filter };
     }
+
     return filter;
   }
 
@@ -425,7 +454,7 @@
     await new Promise(resolve => setTimeout(resolve, delay));
 
     // Try again with updated options
-    return Fliplet.ConditionalContainer.get(filter, { ...options, ts: delay });
+    return Fliplet.ConditionalContainer.get(filter, Object.assign({}, options, { ts: delay }));
   }
 
   /**
@@ -439,6 +468,7 @@
     }
 
     await Fliplet();
+
     const containers = await Promise.all(Object.values(containerInstances));
 
     if (!filter) return containers;

@@ -5,7 +5,7 @@
   "icon": "img/icon.png",
   "tags": ["type:component", "category:layout", "beta:true"],
   "provider_only": false,
-  "references": ["dtContent:richContent"],
+  "references": ["content:richContent"],
   "settings": {
     "asyncRendering": true,
     "interfaceWidgetPackage": "com.fliplet.helper-configuration"
@@ -16,7 +16,7 @@
     "assets": ["js/interface.js"]
   },
   "build": {
-    "dependencies": ["jquery", "bootstrap", "fliplet-core", "fliplet-helper"],
+    "dependencies": ["bootstrap", "fliplet-core"],
     "assets": ["css/build.css", "js/build.js", "css/index.scss"],
     "appAssets": []
   },
@@ -874,7 +874,7 @@
           },
           {
             "name": "containerFlexDirection",
-            "default": "row",
+            "default": "column",
             "columns": 12,
             "styles": [
               {
