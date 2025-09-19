@@ -1,7 +1,7 @@
 {
   "name": "Conditional container",
   "package": "com.fliplet.conditional-container",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "icon": "img/icon.png",
   "tags": ["type:component", "category:layout", "beta:true"],
   "provider_only": false,
@@ -1028,22 +1028,46 @@
             "default": "none",
             "logic": {
               "none": {
-                "hide": ["conditional-container-containerBorderWidth", "conditional-container-containerBorderStyle", "conditional-container-containerBorderColor"]
+                "hide": [
+                  "conditional-container-containerBorderWidth",
+                  "conditional-container-containerBorderStyle",
+                  "conditional-container-containerBorderColor"
+                ]
               },
               "all": {
-                "show": ["conditional-container-containerBorderWidth", "conditional-container-containerBorderStyle", "conditional-container-containerBorderColor"]
+                "show": [
+                  "conditional-container-containerBorderWidth",
+                  "conditional-container-containerBorderStyle",
+                  "conditional-container-containerBorderColor"
+                ]
               },
               "top": {
-                "show": ["conditional-container-containerBorderWidth", "conditional-container-containerBorderStyle", "conditional-container-containerBorderColor"]
+                "show": [
+                  "conditional-container-containerBorderWidth",
+                  "conditional-container-containerBorderStyle",
+                  "conditional-container-containerBorderColor"
+                ]
               },
               "right": {
-                "show": ["conditional-container-containerBorderWidth", "conditional-container-containerBorderStyle", "conditional-container-containerBorderColor"]
+                "show": [
+                  "conditional-container-containerBorderWidth",
+                  "conditional-container-containerBorderStyle",
+                  "conditional-container-containerBorderColor"
+                ]
               },
               "bottom": {
-                "show": ["conditional-container-containerBorderWidth", "conditional-container-containerBorderStyle", "conditional-container-containerBorderColor"]
+                "show": [
+                  "conditional-container-containerBorderWidth",
+                  "conditional-container-containerBorderStyle",
+                  "conditional-container-containerBorderColor"
+                ]
               },
               "left": {
-                "show": ["conditional-container-containerBorderWidth", "conditional-container-containerBorderStyle", "conditional-container-containerBorderColor"]
+                "show": [
+                  "conditional-container-containerBorderWidth",
+                  "conditional-container-containerBorderStyle",
+                  "conditional-container-containerBorderColor"
+                ]
               }
             },
             "styles": [
