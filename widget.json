@@ -1,7 +1,7 @@
 {
   "name": "Conditional container",
   "package": "com.fliplet.conditional-container",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "icon": "img/icon.png",
   "tags": ["type:component", "category:layout", "beta:true"],
   "provider_only": false,
