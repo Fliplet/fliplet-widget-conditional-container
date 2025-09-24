@@ -94,17 +94,8 @@
               });
             }
 
-            const formBuilder = container.querySelector('[data-widget-package="com.fliplet.form-builder"]');
-
-            if (formBuilder) {
-              setTimeout(async() => {
-                await Fliplet.Widget.initializeChildren(container, instance);
-                resolve(instance);
-              }, 50);
-            } else {
-              await Fliplet.Widget.initializeChildren(container, instance);
-              resolve(instance);
-            }
+            await Fliplet.Widget.initializeChildren(container, instance);
+            resolve(instance);
 
             return;
           }
