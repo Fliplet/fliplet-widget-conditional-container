@@ -94,6 +94,7 @@
               });
             }
 
+            clearPendingMarker(container);
             await Fliplet.Widget.initializeChildren(container, instance);
             resolve(instance);
 
@@ -105,6 +106,7 @@
 
           // If not used as conditional container, initialize children directly
           if (!useAsConditional) {
+            clearPendingMarker(container);
             await Fliplet.Widget.initializeChildren(container, instance);
             resolve(instance);
 
@@ -126,6 +128,7 @@
 
               if (containerInfo && !containerInfo.initialized) {
                 container.classList.remove('hidden');
+                clearPendingMarker(container);
                 await Fliplet.Widget.initializeChildren(container, instance);
 
                 // Mark this specific container as initialized
@@ -182,6 +185,15 @@
   }
 
   /**
+   * Removes the marker that keeps a container hidden until its conditions are evaluated
+   * @param {HTMLElement} el - Container element
+   * @returns {void}
+   */
+  function clearPendingMarker(el) {
+    el.removeAttribute('data-conditional-pending');
+  }
+
+  /**
    * Shows all containers with matching ID
    * @param {Number|String} containerId - Container ID
    * @param {Object} data - Container data
@@ -202,6 +214,7 @@
 
       // Show the container
       el.classList.remove('hidden');
+      clearPendingMarker(el);
 
       // Create instance for this specific container
       const containerInstance = {

@@ -65,3 +65,8 @@
 [data-widget-package="com.fliplet.conditional-container"].hidden {
   display: none !important;
 }
+
+/* Runtime visibility control: hide conditional containers from first paint until conditions are evaluated */
+body:not(.mode-interact) [data-widget-package="com.fliplet.conditional-container"][data-conditional-pending] {
+  display: none !important;
+}
