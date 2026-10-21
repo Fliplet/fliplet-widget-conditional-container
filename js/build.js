@@ -51,8 +51,13 @@
   (async function() {
     await Fliplet();
 
-    // Register the widget instance
-    Fliplet.Widget.instance('conditional-container', function(data, parent) {
+    /**
+     * Initializes a conditional container element
+     * @param {Object} data - Container data
+     * @param {Object} [parent] - Parent instance
+     * @returns {Promise<Object>} Container instance
+     */
+    function initializeContainer(data, parent) {
       const container = this;
       const containerId = data.id;
 
@@ -88,13 +93,14 @@
         try {
           // Handle interact/edit mode
           if (Fliplet.Env.get('interact')) {
+            clearPendingMarker(container);
+
             if (Fliplet.Interact) {
               new Fliplet.Interact.ViewContainer(container, {
                 placeholder: templateContent
               });
             }
 
-            clearPendingMarker(container);
             await Fliplet.Widget.initializeChildren(container, instance);
             resolve(instance);
 
@@ -113,8 +119,9 @@
             return;
           }
 
-          // Initially hide container
+          // Initially hide container, then let .hidden alone control visibility
           container.classList.add('hidden');
+          clearPendingMarker(container);
 
           // Process conditions only once per unique container ID
           if (processedIds[containerId]) {
@@ -128,7 +135,6 @@
 
               if (containerInfo && !containerInfo.initialized) {
                 container.classList.remove('hidden');
-                clearPendingMarker(container);
                 await Fliplet.Widget.initializeChildren(container, instance);
 
                 // Mark this specific container as initialized
@@ -166,9 +172,26 @@
       containerInstances[containerId] = instancePromise;
 
       return instancePromise;
-    }, {
+    }
+
+    // On pages with helpers, the widget system binds this widget 50 ms after "initializeWidgets"
+    const bindingDeferred = Fliplet.Env.get('hasHelpers') && !Fliplet.Env.get('helpersInitialized');
+
+    // Register the widget instance
+    Fliplet.Widget.instance('conditional-container', initializeContainer, {
       supportsDynamicContext: true
     });
+
+    // Initialize containers the widget system skipped while this widget was registering.
+    // Start after the widget system's own binding, which doesn't check the pending marker.
+    if (bindingDeferred) {
+      Fliplet.Hooks.on('initializeWidgets', () => {
+        // Must match the widget system's 50 ms conditional-container bind delay (fliplet-core core.js:3350-3357)
+        setTimeout(() => initializeSkippedContainers(initializeContainer), 50);
+      });
+    } else {
+      initializeSkippedContainers(initializeContainer);
+    }
   })();
 
   /**
@@ -194,6 +217,44 @@
   }
 
   /**
+   * Initializes containers that still have the pending marker, which means the handler never ran for them.
+   * This happens when an async-rendering parent (e.g. a Data container) initializes its children
+   * before this widget registers, as the widget system skips them again while the parent is pending.
+   * Polls like the widget system's own waitFor() until none are left or the timeout is reached.
+   * @param {Function} handler - Widget instance handler
+   * @param {Object} [options] - Polling options
+   * @param {Number} [options.interval=50] - Poll interval in ms
+   * @param {Number} [options.timeout=5000] - Max time to poll in ms
+   * @returns {void}
+   */
+  function initializeSkippedContainers(handler, { interval = 50, timeout = 5000 } = {}) {
+    const start = Date.now();
+
+    (function tick() {
+      const pending = document.querySelectorAll('[data-conditional-container-id][data-conditional-pending]');
+
+      if (!pending.length) {
+        return;
+      }
+
+      pending.forEach(el => {
+        // Leave containers inside a pending async-rendering parent to its initializeChildren()
+        if ($(el).closest('[data-fl-widget-instance]').parents('[data-fl-widget-instance][data-async-rendering="pending"]').length) {
+          return;
+        }
+
+        handler.call(el, Fliplet.Widget.getData(parseInt(el.getAttribute('data-conditional-container-id'), 10)));
+      });
+
+      if (Date.now() - start >= timeout) {
+        return;
+      }
+
+      setTimeout(tick, interval);
+    })();
+  }
+
+  /**
    * Shows all containers with matching ID
    * @param {Number|String} containerId - Container ID
    * @param {Object} data - Container data
@@ -214,7 +275,6 @@
 
       // Show the container
       el.classList.remove('hidden');
-      clearPendingMarker(el);
 
       // Create instance for this specific container
       const containerInstance = {
