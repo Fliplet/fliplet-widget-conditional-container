@@ -220,38 +220,47 @@
    * Initializes containers that still have the pending marker, which means the handler never ran for them.
    * This happens when an async-rendering parent (e.g. a Data container) initializes its children
    * before this widget registers, as the widget system skips them again while the parent is pending.
-   * Polls like the widget system's own waitFor() until none are left or the timeout is reached.
+   * Runs once, then again whenever an async-rendering parent changes state, until none are left.
    * @param {Function} handler - Widget instance handler
-   * @param {Object} [options] - Polling options
-   * @param {Number} [options.interval=50] - Poll interval in ms
-   * @param {Number} [options.timeout=5000] - Max time to poll in ms
    * @returns {void}
    */
-  function initializeSkippedContainers(handler, { interval = 50, timeout = 5000 } = {}) {
-    const start = Date.now();
+  function initializeSkippedContainers(handler) {
+    if (!initializeUnblockedContainers(handler)) {
+      return;
+    }
 
-    (function tick() {
-      const pending = document.querySelectorAll('[data-conditional-container-id][data-conditional-pending]');
+    // The parent doesn't retry skipped children when it turns ready, so watch for that here
+    const observer = new MutationObserver(() => {
+      if (!initializeUnblockedContainers(handler)) {
+        observer.disconnect();
+      }
+    });
 
-      if (!pending.length) {
+    observer.observe(document.body, {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-async-rendering']
+    });
+  }
+
+  /**
+   * Runs the handler on marked containers that are not inside a pending async-rendering parent
+   * @param {Function} handler - Widget instance handler
+   * @returns {Boolean} Whether marked containers are left
+   */
+  function initializeUnblockedContainers(handler) {
+    const selector = '[data-conditional-container-id][data-conditional-pending]';
+
+    document.querySelectorAll(selector).forEach(el => {
+      // Leave containers inside a pending async-rendering parent to its initializeChildren()
+      if ($(el).closest('[data-fl-widget-instance]').parents('[data-fl-widget-instance][data-async-rendering="pending"]').length) {
         return;
       }
 
-      pending.forEach(el => {
-        // Leave containers inside a pending async-rendering parent to its initializeChildren()
-        if ($(el).closest('[data-fl-widget-instance]').parents('[data-fl-widget-instance][data-async-rendering="pending"]').length) {
-          return;
-        }
+      handler.call(el, Fliplet.Widget.getData(parseInt(el.getAttribute('data-conditional-container-id'), 10)));
+    });
 
-        handler.call(el, Fliplet.Widget.getData(parseInt(el.getAttribute('data-conditional-container-id'), 10)));
-      });
-
-      if (Date.now() - start >= timeout) {
-        return;
-      }
-
-      setTimeout(tick, interval);
-    })();
+    return !!document.querySelector(selector);
   }
 
   /**
