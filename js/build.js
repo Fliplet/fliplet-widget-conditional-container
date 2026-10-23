@@ -51,8 +51,13 @@
   (async function() {
     await Fliplet();
 
-    // Register the widget instance
-    Fliplet.Widget.instance('conditional-container', function(data, parent) {
+    /**
+     * Initializes a conditional container element
+     * @param {Object} data - Container data
+     * @param {Object} [parent] - Parent instance
+     * @returns {Promise<Object>} Container instance
+     */
+    function initializeContainer(data, parent) {
       const container = this;
       const containerId = data.id;
 
@@ -88,6 +93,8 @@
         try {
           // Handle interact/edit mode
           if (Fliplet.Env.get('interact')) {
+            clearPendingMarker(container);
+
             if (Fliplet.Interact) {
               new Fliplet.Interact.ViewContainer(container, {
                 placeholder: templateContent
@@ -105,14 +112,16 @@
 
           // If not used as conditional container, initialize children directly
           if (!useAsConditional) {
+            clearPendingMarker(container);
             await Fliplet.Widget.initializeChildren(container, instance);
             resolve(instance);
 
             return;
           }
 
-          // Initially hide container
+          // Initially hide container, then let .hidden alone control visibility
           container.classList.add('hidden');
+          clearPendingMarker(container);
 
           // Process conditions only once per unique container ID
           if (processedIds[containerId]) {
@@ -163,9 +172,26 @@
       containerInstances[containerId] = instancePromise;
 
       return instancePromise;
-    }, {
+    }
+
+    // On pages with helpers, the widget system binds this widget 50 ms after "initializeWidgets"
+    const bindingDeferred = Fliplet.Env.get('hasHelpers') && !Fliplet.Env.get('helpersInitialized');
+
+    // Register the widget instance
+    Fliplet.Widget.instance('conditional-container', initializeContainer, {
       supportsDynamicContext: true
     });
+
+    // Initialize containers the widget system skipped while this widget was registering.
+    // Start after the widget system's own binding, which doesn't check the pending marker.
+    if (bindingDeferred) {
+      Fliplet.Hooks.on('initializeWidgets', () => {
+        // Must match the widget system's 50 ms conditional-container bind delay (fliplet-core core.js:3350-3357)
+        setTimeout(() => initializeSkippedContainers(initializeContainer), 50);
+      });
+    } else {
+      initializeSkippedContainers(initializeContainer);
+    }
   })();
 
   /**
@@ -179,6 +205,62 @@
     }
 
     return !!conditionalSetting;
+  }
+
+  /**
+   * Removes the marker that keeps a container hidden until its conditions are evaluated
+   * @param {HTMLElement} el - Container element
+   * @returns {void}
+   */
+  function clearPendingMarker(el) {
+    el.removeAttribute('data-conditional-pending');
+  }
+
+  /**
+   * Initializes containers that still have the pending marker, which means the handler never ran for them.
+   * This happens when an async-rendering parent (e.g. a Data container) initializes its children
+   * before this widget registers, as the widget system skips them again while the parent is pending.
+   * Runs once, then again whenever an async-rendering parent changes state, until none are left.
+   * @param {Function} handler - Widget instance handler
+   * @returns {void}
+   */
+  function initializeSkippedContainers(handler) {
+    if (!initializeUnblockedContainers(handler)) {
+      return;
+    }
+
+    // The parent doesn't retry skipped children when it turns ready, so watch for that here
+    const observer = new MutationObserver(() => {
+      if (!initializeUnblockedContainers(handler)) {
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document.body, {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-async-rendering']
+    });
+  }
+
+  /**
+   * Runs the handler on marked containers that are not inside a pending async-rendering parent
+   * @param {Function} handler - Widget instance handler
+   * @returns {Boolean} Whether marked containers are left
+   */
+  function initializeUnblockedContainers(handler) {
+    const selector = '[data-conditional-container-id][data-conditional-pending]';
+
+    document.querySelectorAll(selector).forEach(el => {
+      // Leave containers inside a pending async-rendering parent to its initializeChildren()
+      if ($(el).closest('[data-fl-widget-instance]').parents('[data-fl-widget-instance][data-async-rendering="pending"]').length) {
+        return;
+      }
+
+      handler.call(el, Fliplet.Widget.getData(parseInt(el.getAttribute('data-conditional-container-id'), 10)));
+    });
+
+    return !!document.querySelector(selector);
   }
 
   /**
