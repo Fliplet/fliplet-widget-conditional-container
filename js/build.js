@@ -17,6 +17,7 @@
  * - conditionResults: Stores evaluation results by container ID to avoid redundant evaluations
  * - processedIds: Tracks which containers have been evaluated to prevent duplicate processing
  * - containersByIds: Groups container elements by ID for concurrent updates
+ * - initializedContainers: Tracks container elements the handler has run for, so startup recovery skips them
  *
  * LIFECYCLE:
  * 1. Widget initialization and template processing
@@ -47,6 +48,9 @@
   const processedIds = {};
   const containersByIds = {};
 
+  // Container elements the handler has run for
+  const initializedContainers = new WeakSet();
+
   // Initialize Fliplet and register widget
   (async function() {
     await Fliplet();
@@ -60,6 +64,8 @@
     function initializeContainer(data, parent) {
       const container = this;
       const containerId = data.id;
+
+      initializedContainers.add(container);
 
       // Process template
       const emptyTemplate = container.querySelector('template[name="empty"]');
@@ -220,6 +226,8 @@
    * Initializes containers that still have the pending marker, which means the handler never ran for them.
    * This happens when an async-rendering parent (e.g. a Data container) initializes its children
    * before this widget registers, as the widget system skips them again while the parent is pending.
+   * Skipped rules-off containers holding a marked container are initialized too, as their own
+   * async-rendering wrapper stays pending until they are, which keeps the marked container blocked.
    * Runs once, then again whenever an async-rendering parent changes state, until none are left.
    * @param {Function} handler - Widget instance handler
    * @returns {void}
@@ -244,14 +252,19 @@
   }
 
   /**
-   * Runs the handler on marked containers that are not inside a pending async-rendering parent
+   * Runs the handler on skipped containers that are not inside a pending async-rendering parent.
+   * Skipped means marked, or not initialized yet while holding a marked container (rules off has no marker).
    * @param {Function} handler - Widget instance handler
    * @returns {Boolean} Whether marked containers are left
    */
   function initializeUnblockedContainers(handler) {
     const selector = '[data-conditional-container-id][data-conditional-pending]';
 
-    document.querySelectorAll(selector).forEach(el => {
+    document.querySelectorAll('[data-conditional-container-id]').forEach(el => {
+      if (!el.hasAttribute('data-conditional-pending') && (initializedContainers.has(el) || !el.querySelector(selector))) {
+        return;
+      }
+
       // Leave containers inside a pending async-rendering parent to its initializeChildren()
       if ($(el).closest('[data-fl-widget-instance]').parents('[data-fl-widget-instance][data-async-rendering="pending"]').length) {
         return;
